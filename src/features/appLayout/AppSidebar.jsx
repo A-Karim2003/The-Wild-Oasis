@@ -1,60 +1,82 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Calendar, Home, Settings, Store, Users } from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
-// Menu items.
+import logoLight from "@/data/img/logo-light.png";
+import logoDark from "@/data/img/logo-dark.png";
+import { useTheme } from "@/components/context/ThemeProvider";
+import { Link } from "react-router";
+
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "dashboard",
     icon: Home,
   },
   {
     title: "Bookings",
-    url: "#",
-    icon: "",
+    url: "bookings",
+    icon: Calendar,
   },
   {
     title: "Cabins",
-    url: "#",
-    icon: "",
+    url: "cabins",
+    icon: Store,
   },
   {
     title: "Users",
-    url: "#",
-    icon: "",
+    url: "users",
+    icon: Users,
   },
   {
     title: "Settings",
-    url: "#",
+    url: "settings",
     icon: Settings,
   },
 ];
 
 export function AppSidebar() {
+  const { resolvedTheme } = useTheme();
+  const { open } = useSidebar();
+
   return (
-    <Sidebar>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+    <Sidebar collapsible="icon" className={"bg-gold-glow"}>
+      <SidebarHeader
+        className={`${
+          !open ? "h-18 flex items-center justify-center" : ""
+        } bg-gold-glow`}
+      >
+        <div className="flex justify-center">
+          {resolvedTheme === "light" && <img src={logoLight} width={140} />}
+          {resolvedTheme === "dark" && <img src={logoDark} width={140} />}
+        </div>
+      </SidebarHeader>
+
+      {open && <hr />}
+
+      <SidebarContent className="w-full bg-gold-glow">
+        <SidebarGroup className="mt-4">
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="space-y-4">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                  <SidebarMenuButton asChild className="py-5">
+                    <Link to={item.url} className="cursor-default flex gap-4">
+                      <item.icon size={64} className="size-5.5!" />
+                      <span className="text-xl font-semibold">
+                        {item.title}
+                      </span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

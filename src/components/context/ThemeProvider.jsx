@@ -11,18 +11,25 @@ export default function ThemeProvider({
     () => localStorage.getItem(storageKey) ?? defaultTheme
   );
 
-  // Handles checking theme mode: "light" | "dark" | "system"
+  // Handles checking theme mode: "light" | "dark"
+  const resolvedTheme =
+    theme === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+      : theme;
+
   useEffect(() => {
     const html = document.documentElement;
     html.classList.remove("light", "dark");
 
-    const resolvedTheme =
+    const currResolvedTheme =
       theme === "system"
         ? window.matchMedia("(prefers-color-scheme: dark)").matches
           ? "dark"
           : "light"
         : theme;
-    html.classList.add(resolvedTheme);
+    html.classList.add(currResolvedTheme);
   }, [theme]);
 
   function changeTheme(newTheme) {
@@ -30,7 +37,11 @@ export default function ThemeProvider({
     setTheme(newTheme);
   }
 
-  return <ThemeContext value={{ theme, changeTheme }}>{children}</ThemeContext>;
+  return (
+    <ThemeContext value={{ resolvedTheme, theme, changeTheme }}>
+      {children}
+    </ThemeContext>
+  );
 }
 
 export function useTheme() {

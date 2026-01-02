@@ -6,6 +6,29 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@layer utilities {
+  .bg-gold-glow {
+    background: radial-gradient(
+      ellipse 1400px 1000px at 20% 0%,
+      oklch(0.96 0.09 85 / 0.45) 0%,
+      oklch(0.98 0.05 85 / 0.25) 35%,
+      oklch(1 0 0 / 0.1) 65%,
+      oklch(1 0 0) 100%
+    );
+  }
+
+  .dark .bg-gold-glow {
+    background: radial-gradient(
+      ellipse 1500px 800px at 15% 0%,
+      oklch(0.25 0.04 75 / 0.7) 0%,
+      oklch(0.18 0.03 75 / 0.4) 35%,
+      oklch(0.12 0.01 75 / 0.1) 60%,
+      oklch(0.1 0 0) 100%
+    );
+    background-color: oklch(0.1 0 0);
+  }
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -83,7 +106,6 @@
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
 
-  /* 🟡 GOLD PALETTE — NOW EXISTS IN LIGHT MODE */
   --gold: oklch(0.82 0.12 85);
   --gold-light: oklch(0.92 0.06 85);
   --gold-bright: oklch(0.88 0.18 95);
@@ -99,9 +121,6 @@
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
-/* =========================
-   DARK MODE (OVERRIDES)
-   ========================= */
 .dark {
   --background: oklch(0 0 0);
   --foreground: oklch(1 0 0);
@@ -148,8 +167,17 @@
   * {
     @apply border-border outline-ring/50;
   }
-
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Gold gradient background for dark mode */
+  .dark body {
+    background: radial-gradient(
+      ellipse 1000px 800px at 0% 0%,
+      oklch(0.12 0.06 75) 0%,
+      oklch(0.05 0.03 75) 20%,
+      oklch(0 0 0) 40%
+    );
   }
 }
