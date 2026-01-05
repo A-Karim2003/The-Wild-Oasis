@@ -8,7 +8,7 @@ import { ChartNoAxesColumnIncreasing } from "lucide-react";
 
 export default function Dashboard() {
   return (
-    <div className="h-full">
+    <div className="h-full w-full">
       <h1>Dashboard</h1>
 
       <div className={styles.grid}>

@@ -5,6 +5,9 @@ import { SidebarProvider } from "./components/ui/sidebar";
 import Cookies from "js-cookie";
 import { AppSidebar } from "./features/appLayout/AppSidebar";
 import { useState } from "react";
+import { supabase } from "./lib/supabaseClient.js";
+
+console.log(supabase);
 
 function RootLayout() {
   const [open, setOpen] = useState(() => {
@@ -22,7 +25,7 @@ function RootLayout() {
         <AppSidebar />
         <main className="w-screen h-screen bg-gold-glow flex flex-col">
           <Navbar />
-          <div className="flex-1 p-4 border max-w-360">
+          <div className="flex-1 p-4 max-w-360">
             <Outlet />
           </div>
         </main>
