@@ -7,7 +7,7 @@ export default function Navbar() {
   return (
     <header className="h-18 w-full  items-center flex justify-between px-6">
       <SidebarTrigger />
-      <div className="flex items-center gap-6">
+      <nav className="flex items-center gap-6">
         <div className="flex items-center gap-3">
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" />
@@ -21,7 +21,7 @@ export default function Navbar() {
           <ThemeToggle />
           <LogOut />
         </div>
-      </div>
+      </nav>
     </header>
   );
 }

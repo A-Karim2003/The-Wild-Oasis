@@ -15,7 +15,7 @@ import {
 import logoLight from "@/data/img/logo-light.png";
 import logoDark from "@/data/img/logo-dark.png";
 import { useTheme } from "@/components/context/ThemeProvider";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 const items = [
   {
@@ -48,6 +48,7 @@ const items = [
 export function AppSidebar() {
   const { resolvedTheme } = useTheme();
   const { open } = useSidebar();
+  const { pathname } = useLocation();
 
   return (
     <Sidebar collapsible="icon" className={"bg-gold-glow"}>
@@ -70,9 +71,13 @@ export function AppSidebar() {
             <SidebarMenu className="space-y-4">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className="py-5">
+                  <SidebarMenuButton
+                    asChild
+                    className="py-5 hover:bg-gold-accent data-[active=true]:bg-gold-dark flex"
+                    isActive={pathname.includes(item.url)}
+                  >
                     <Link to={item.url} className="cursor-default flex gap-4">
-                      <item.icon size={64} className="size-5.5!" />
+                      <item.icon className="size-5.5!" />
                       <span className="text-xl font-semibold">
                         {item.title}
                       </span>
