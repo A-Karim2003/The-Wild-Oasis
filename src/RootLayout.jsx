@@ -19,6 +19,14 @@ function RootLayout() {
     setOpen(newOpen);
     Cookies.set("sidebar-open", newOpen, { expires: 10 });
   }
+
+  async function fetch() {
+    let { data: cabins, error } = await supabase.from("cabins").select("*");
+    console.log(cabins);
+  }
+
+  fetch();
+
   return (
     <ThemeProvider>
       <SidebarProvider open={open} onOpenChange={handleOpenChange}>
