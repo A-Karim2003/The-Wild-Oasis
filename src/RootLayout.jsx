@@ -7,8 +7,6 @@ import { AppSidebar } from "./features/appLayout/AppSidebar";
 import { useState } from "react";
 import { supabase } from "./lib/supabaseClient.js";
 
-console.log(supabase);
-
 function RootLayout() {
   const [open, setOpen] = useState(() => {
     const saved = Cookies.get("sidebar-open");
