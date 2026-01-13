@@ -20,7 +20,7 @@ function RootLayout() {
 
   async function fetch() {
     let { data: cabins, error } = await supabase.from("cabins").select("*");
-    console.log(cabins);
+    // console.log(cabins);
   }
 
   fetch();
