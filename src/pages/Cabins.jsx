@@ -1,6 +1,7 @@
 import DataTable from "@/features/cabins/DataTable";
 import { getCabins } from "@/services/apiBookings";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { columns } from "../features/cabins/columns";
 
 export default function Cabins() {
   // const queryClient = useQueryClient();
@@ -11,8 +12,8 @@ export default function Cabins() {
   });
 
   return (
-    <div className="border border-red-500">
-      <DataTable />
+    <div>
+      <DataTable data={data} columns={columns} />
     </div>
   );
 }

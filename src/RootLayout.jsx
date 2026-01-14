@@ -31,7 +31,7 @@ function RootLayout() {
         <AppSidebar />
         <main className="w-screen h-screen bg-gold-glow flex flex-col">
           <Navbar />
-          <div className="flex-1 p-4 max-w-360 border">
+          <div className="flex-1 p-4 max-w-360">
             <Outlet />
           </div>
         </main>
