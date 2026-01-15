@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   flexRender,
@@ -16,13 +16,32 @@ import {
 } from "@/components/ui/table";
 
 export default function DataTable({ data, columns }) {
+  const [columnVisibility, setColumnVisibility] = useState({
+    description: window.innerWidth >= 768,
+  });
+
+  useEffect(() => {
+    function handleResize() {
+      setColumnVisibility({
+        description: window.innerWidth >= 768,
+      });
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const table = useReactTable({
     data: data ?? [],
+    state: {
+      columnVisibility,
+    },
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  console.log(table.getRowModel().rows[0].getVisibleCells());
+  // console.log(table.getRowModel().rows[0].getVisibleCells());
 
   return (
     <div className="overflow-hidden rounded-md border">

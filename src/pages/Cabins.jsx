@@ -2,6 +2,7 @@ import DataTable from "@/features/cabins/DataTable";
 import { getCabins } from "@/services/apiBookings";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { columns } from "../features/cabins/columns";
+import CabinTableOperations from "@/features/cabins/CabinTableOperations";
 
 export default function Cabins() {
   // const queryClient = useQueryClient();
@@ -13,6 +14,10 @@ export default function Cabins() {
   if (isPending) return <h1>Loading...</h1>;
   return (
     <div>
+      <div className="mb-6">
+        <h2 className="text-4xl font-bold">All cabins</h2>
+        <CabinTableOperations />
+      </div>
       <DataTable data={data} columns={columns} />
     </div>
   );

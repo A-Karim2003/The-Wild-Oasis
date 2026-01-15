@@ -4,15 +4,15 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Copy, Pencil, Trash } from "lucide-react";
 
+const headerStyles = "flex items-center gap-2 text-sm md:text-lg ";
 export const columns = [
   {
     accessorKey: "image_url",
-    header: () => <div className="flex items-center gap-2 text-lg">Image</div>,
+    header: () => <div className={`${headerStyles}`}>Image</div>,
 
     cell: (info) => (
       <img
@@ -24,38 +24,39 @@ export const columns = [
   },
   {
     accessorKey: "name",
-    header: () => <div className="flex items-center gap-2 text-lg">Name</div>,
+    header: () => <div className={`${headerStyles}`}>Name</div>,
 
-    cell: (info) => <span>{info.getValue()}</span>,
+    cell: (info) => (
+      <span className="whitespace-normal">{info.getValue()}</span>
+    ),
   },
   {
     accessorKey: "capacity",
-    header: () => (
-      <div className="flex items-center gap-2 text-lg">Capacity</div>
+    header: () => <div className={`${headerStyles}`}>Capacity</div>,
+    cell: (info) => (
+      <span className="whitespace-normal">
+        Fits up to {info.getValue()} guests
+      </span>
     ),
-    cell: (info) => <span>Fits up to {info.getValue()} guests</span>,
   },
   {
     accessorKey: "price",
-    header: () => <div className="flex items-center gap-2 text-lg">Price</div>,
+    header: () => <div className={`${headerStyles}`}>Price</div>,
     cell: (info) => <span>{formatCurrency(info.getValue())}</span>,
   },
   {
     accessorKey: "discount",
-    header: () => (
-      <div className="flex items-center gap-2 text-lg">Discount</div>
-    ),
+    header: () => <div className={`${headerStyles}`}>Discount</div>,
     cell: (info) => (
       <span className={info.getValue() > 0 ? "text-green-700" : ""}>
         {formatCurrency(info.getValue())}
       </span>
     ),
   },
+
   {
     accessorKey: "description",
-    header: () => (
-      <div className="flex items-center gap-2 text-lg">Description</div>
-    ),
+    header: () => <div className={headerStyles}>Description</div>,
     cell: (info) => (
       <p className="whitespace-normal max-w-xs">{info.getValue()}</p>
     ),
@@ -65,15 +66,23 @@ export const columns = [
     id: "actions",
     header: () => <span className="sr-only">actions</span>,
     cell: (info) => {
-      console.log(info);
+      const cabin = info.row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger>Open</DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem></DropdownMenuItem>
-            <DropdownMenuItem></DropdownMenuItem>
-            <DropdownMenuItem></DropdownMenuItem>
-            <DropdownMenuItem></DropdownMenuItem>
+            <DropdownMenuItem>
+              <Copy />
+              <span>Duplicated</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Pencil />
+              <span>Edit</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Trash />
+              <span>Delete</span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
