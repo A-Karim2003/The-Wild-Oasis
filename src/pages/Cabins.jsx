@@ -10,7 +10,7 @@ export default function Cabins() {
     queryKey: ["cabins"],
     queryFn: () => getCabins(),
   });
-
+  if (isPending) return <h1>Loading...</h1>;
   return (
     <div>
       <DataTable data={data} columns={columns} />
