@@ -8,13 +8,19 @@ const tabTriggerClass = `rounded-lg font-medium text-sm
 
 export default function Filter() {
   return (
-    <Tabs defaultValue="account">
+    <Tabs defaultValue="all">
       <TabsList className="bg-gold-light/20 dark:bg-gold/10 rounded-xl border border-gold/20 dark:border-gold/30">
-        <TabsTrigger value="account" className={tabTriggerClass}>
-          Account
+        <TabsTrigger value="all" className={tabTriggerClass}>
+          All
         </TabsTrigger>
-        <TabsTrigger value="password" className={tabTriggerClass}>
-          Password
+        <TabsTrigger value="checkedOut" className={tabTriggerClass}>
+          Checked out
+        </TabsTrigger>
+        <TabsTrigger value="checkedIn" className={tabTriggerClass}>
+          Checked out
+        </TabsTrigger>
+        <TabsTrigger value="unconfirmed" className={tabTriggerClass}>
+          Unconfirmed
         </TabsTrigger>
       </TabsList>
     </Tabs>

@@ -14,7 +14,7 @@ export default function Cabins() {
   if (isPending) return <h1>Loading...</h1>;
   return (
     <div>
-      <div className="mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <h2 className="text-4xl font-bold">All cabins</h2>
         <CabinTableOperations />
       </div>
