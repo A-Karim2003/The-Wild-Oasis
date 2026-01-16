@@ -6,7 +6,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Copy, Pencil, Trash } from "lucide-react";
+import { Copy, EllipsisVertical, Pencil, Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const headerStyles = "flex items-center gap-2 text-sm md:text-lg ";
 export const columns = [
@@ -69,7 +70,12 @@ export const columns = [
       const cabin = info.row.original;
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-gray-200">
+              <EllipsisVertical className="size-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>
               <Copy />
@@ -79,7 +85,7 @@ export const columns = [
               <Pencil />
               <span>Edit</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => console.log("DELETED")}>
               <Trash />
               <span>Delete</span>
             </DropdownMenuItem>

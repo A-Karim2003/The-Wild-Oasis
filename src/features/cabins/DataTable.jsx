@@ -14,6 +14,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteCabin } from "@/services/apiCabins";
 
 export default function DataTable({ data, columns }) {
   const [columnVisibility, setColumnVisibility] = useState({
@@ -41,7 +43,23 @@ export default function DataTable({ data, columns }) {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  // console.log(table.getRowModel().rows[0].getVisibleCells());
+  //!
+
+  const queryClient = useQueryClient();
+
+  const deleteCabinMutation = useMutation({
+    mutationFn: (id) => deleteCabin(id),
+    onMutate: async () => {
+      //? cancel ongoing fetches that can overwrite optimistic update
+      await queryClient.cancelQueries({ queryKey: ["cabins"] });
+
+      //? Snapshot the previous value
+      const oldCabins = queryClient.getQueriesData({ queryKey: ["cabins"] });
+
+      //? Optimistically update to the new value
+      queryClient.setQueriesData({ queryKey: ["cabins"] });
+    },
+  });
 
   return (
     <div className="overflow-hidden rounded-md border">

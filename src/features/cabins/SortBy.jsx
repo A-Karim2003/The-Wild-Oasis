@@ -32,7 +32,7 @@ const options = {
   "amount-low": "Sort by amount (lowest first)",
 };
 
-export default function SortBy() {
+export default function SortBy({ isMobileScreen }) {
   const [selectedMenu, setSelectedMenu] = useState("date-recent");
   const [isSmall, setIsSmall] = useState(false);
 
@@ -48,7 +48,9 @@ export default function SortBy() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className={`${dropdownTriggerClass} px-4 flex items-center gap-4`}
+        className={`${dropdownTriggerClass} px-4 flex items-center gap-4 ${
+          isMobileScreen ? "text-xs" : "text-sm"
+        }`}
       >
         {isSmall && (
           <span className="text-nowrap">

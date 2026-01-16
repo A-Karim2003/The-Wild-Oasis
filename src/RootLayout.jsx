@@ -29,7 +29,7 @@ function RootLayout() {
     <ThemeProvider>
       <SidebarProvider open={open} onOpenChange={handleOpenChange}>
         <AppSidebar />
-        <main className="w-screen h-screen bg-gold-glow flex flex-col">
+        <main className="h-screen w-full overflow-hidden bg-gold-glow flex flex-col">
           <Navbar />
           <div className="flex-1 p-4 max-w-360">
             <Outlet />
