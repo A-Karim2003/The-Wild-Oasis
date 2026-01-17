@@ -1,5 +1,5 @@
 import DataTable from "@/features/cabins/DataTable";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { columns } from "../features/cabins/columns";
 import CabinTableOperations from "@/features/cabins/CabinTableOperations";
 import { getCabins } from "@/services/apiCabins";
@@ -11,8 +11,9 @@ export default function Cabins() {
   });
 
   if (isPending) return <h1>Loading...</h1>;
+  if (isPending) return <h1>{error.message}</h1>;
   return (
-    <div>
+    <div className="flex-1 min-h-0 flex flex-col">
       <div className="mb-6 flex items-center justify-between gap-4">
         <h2 className="text-4xl font-bold max-sm:hidden">All cabins</h2>
         <CabinTableOperations />

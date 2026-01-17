@@ -13,7 +13,8 @@ export async function deleteCabin(id) {
     .from("cabins")
     .delete()
     .eq("id", id)
-    .select();
+    .select()
+    .single();
 
   if (error) throw new Error(error.message);
 

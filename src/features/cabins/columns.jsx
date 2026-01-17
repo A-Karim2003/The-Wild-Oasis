@@ -68,6 +68,7 @@ export const columns = [
     header: () => <span className="sr-only">actions</span>,
     cell: (info) => {
       const cabin = info.row.original;
+      const { deleteCabinMutation } = info.table.options.meta;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -85,7 +86,9 @@ export const columns = [
               <Pencil />
               <span>Edit</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => console.log("DELETED")}>
+            <DropdownMenuItem
+              onClick={() => deleteCabinMutation.mutate(cabin.id)}
+            >
               <Trash />
               <span>Delete</span>
             </DropdownMenuItem>

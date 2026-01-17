@@ -1,11 +1,11 @@
 import { Outlet } from "react-router";
 import Navbar from "./features/appLayout/Navbar";
-import ThemeProvider from "./components/context/ThemeProvider";
+import ThemeProvider, { useTheme } from "./components/context/ThemeProvider";
 import { SidebarProvider } from "./components/ui/sidebar";
 import Cookies from "js-cookie";
 import { AppSidebar } from "./features/appLayout/AppSidebar";
 import { useState } from "react";
-import { supabase } from "./lib/supabaseClient.js";
+import { Bounce, ToastContainer } from "react-toastify";
 
 function RootLayout() {
   const [open, setOpen] = useState(() => {
@@ -18,21 +18,26 @@ function RootLayout() {
     Cookies.set("sidebar-open", newOpen, { expires: 10 });
   }
 
-  async function fetch() {
-    let { data: cabins, error } = await supabase.from("cabins").select("*");
-    // console.log(cabins);
-  }
-
-  fetch();
-
   return (
     <ThemeProvider>
       <SidebarProvider open={open} onOpenChange={handleOpenChange}>
         <AppSidebar />
         <main className="h-screen w-full overflow-hidden bg-gold-glow flex flex-col">
           <Navbar />
-          <div className="flex-1 p-4 max-w-360">
+          <div className="flex-1 p-4 max-w-360 flex flex-col min-h-0">
             <Outlet />
+            <ToastContainer
+              position="bottom-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick={false}
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              theme="light"
+              transition={Bounce}
+            />
           </div>
         </main>
       </SidebarProvider>
