@@ -18,6 +18,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCabin } from "@/services/apiCabins";
 import { toast } from "react-toastify";
 import { useTheme } from "@/components/context/ThemeProvider";
+import { Button } from "@/components/ui/button";
+import AddCabinModal from "./AddCabinModal";
+import { Dialog } from "@radix-ui/react-dialog";
+import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export default function DataTable({ data, columns }) {
   const { theme } = useTheme();
@@ -54,7 +58,7 @@ export default function DataTable({ data, columns }) {
 
       //? Optimistically update to the new value
       queryClient.setQueryData(["cabins"], (old) =>
-        old.filter((cabin) => cabin.id !== deletedId)
+        old.filter((cabin) => cabin.id !== deletedId),
       );
 
       //* onMutateResult from onError will have access to oldCabins
@@ -94,7 +98,7 @@ export default function DataTable({ data, columns }) {
   });
 
   return (
-    <div className="rounded-md min-h-0 flex-1 flex flex-col ">
+    <div className="rounded-md min-h-0  flex-1 flex flex-col gap-5">
       <Table className="border">
         <TableHeader className={"bg-gold-accent"}>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -105,7 +109,7 @@ export default function DataTable({ data, columns }) {
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </TableHead>
               ))}
@@ -133,6 +137,20 @@ export default function DataTable({ data, columns }) {
           )}
         </TableBody>
       </Table>
+
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            variant="outline"
+            className="ml-auto py-2 px-8 border-gold-accent hover:border-slate-200 hover:bg-gold-accent"
+          >
+            Add new cabin
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="border border-red-500 w-300">
+          <AddCabinModal />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
