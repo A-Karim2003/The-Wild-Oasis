@@ -1,12 +1,10 @@
 import { Button } from "@/components/ui/button";
 import {
   DialogClose,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 
 export default function AddCabinModal() {
   return (

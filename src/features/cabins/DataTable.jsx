@@ -147,7 +147,7 @@ export default function DataTable({ data, columns }) {
             Add new cabin
           </Button>
         </DialogTrigger>
-        <DialogContent className="border border-red-500 w-300">
+        <DialogContent className="w-[90vw] max-w-300">
           <AddCabinModal />
         </DialogContent>
       </Dialog>
