@@ -15,13 +15,27 @@ export default function AddCabinModal() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  console.log(errors);
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    defaultValues: {
+      cabinName: "Mountain View",
+      cabinCapacity: 4,
+      cabinPrice: 150,
+      cabinDiscount: 0,
+      cabinDescription: "A cozy cabin in the woods.",
+    },
+  });
 
   function onSubmit(data) {
     console.log(data);
+    reset({
+      cabinName: "",
+      cabinCapacity: "",
+      cabinPrice: "",
+      cabinDiscount: 0,
+      cabinDescription: "",
+    });
   }
 
   return (
@@ -111,6 +125,15 @@ export default function AddCabinModal() {
             </span>
           )}
         </Field>
+
+        <Field>
+          <FieldLabel htmlFor="cabinPhoto">Cabin Photo</FieldLabel>
+          <Input
+            type="file"
+            id="cabinPhoto"
+            {...register("cabinPhoto")}
+          ></Input>
+        </Field>
       </form>
       <DialogFooter className="sm:justify-end">
         <DialogClose asChild>
@@ -123,6 +146,7 @@ export default function AddCabinModal() {
           type="submit"
           className={"bg-gold-bright"}
           form="cabin-form"
+          disabled={isSubmitting}
         >
           Create new cabin
         </Button>
