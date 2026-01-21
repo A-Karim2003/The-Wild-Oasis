@@ -29,8 +29,6 @@ export default function DataTable({ data, columns }) {
     description: window.innerWidth >= 768,
   });
 
-  console.log(theme);
-
   useEffect(() => {
     function handleResize() {
       setColumnVisibility({
