@@ -63,7 +63,6 @@ export default function DataTable({ data, columns }) {
       return { oldCabins };
     },
     onSuccess: (deletedCabin) => {
-      console.log(deletedCabin);
       toast.success(`Deleted ${deletedCabin.name}`, {
         theme: theme,
       });

@@ -1,3 +1,4 @@
+import { useTheme } from "@/components/context/ThemeProvider";
 import { Button } from "@/components/ui/button";
 import {
   DialogClose,
@@ -9,9 +10,13 @@ import { Field, FieldLabel } from "@/components/ui/field";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { createCabin } from "@/services/apiCabins";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
 export default function AddCabinModal() {
+  const queryClient = useQueryClient();
+  const theme = useTheme();
   const {
     register,
     handleSubmit,
@@ -37,6 +42,45 @@ export default function AddCabinModal() {
       cabinDescription: "",
     });
   }
+
+  const addCabinMutation = useMutation({
+    mutationFn: async (newCabin) => await createCabin(newCabin),
+
+    onMutate: (newCabin) => {
+      //? cancel ongoing fetches that can overwrite optimistic update
+      queryClient.cancelQueries({ queryKey: ["cabins"] });
+
+      //? Snapshot the previous value for rollback
+      const oldCabins = queryClient.getQueryData({ queryKey: ["cabins"] });
+
+      //? create a mock version of the cabin that includes a temp ID
+      const optimisticCabin = { ...newCabin, id: Date.now() };
+
+      //? Optimistically update to the new value
+      queryClient.setQueryData(["cabins"], (old) => [...(old || ), newCabin]);
+
+      return { oldCabins };
+    },
+
+    onError: (error, newCabin, onMutateResult) => {
+      queryClient.setQueryData(["cabins"], onMutateResult.oldCabins);
+      console.error("Failed to add cabin:", error.message);
+      toast.error(`Failed to add ${newCabin.name} newCabin`, {
+        theme: theme,
+      });
+    },
+
+    onSuccess: (newCabin) => {
+      toast.success(`Added ${newCabin.name}`, {
+        theme: theme,
+      });
+    },
+
+    //? refetch changes from server
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["cabins"] });
+    },
+  });
 
   return (
     <>
