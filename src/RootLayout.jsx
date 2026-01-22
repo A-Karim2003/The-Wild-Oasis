@@ -28,15 +28,16 @@ function RootLayout() {
             <Outlet />
             <ToastContainer
               position="bottom-right"
-              autoClose={3000}
+              autoClose={2000}
               hideProgressBar={false}
               newestOnTop={false}
               closeOnClick={false}
               rtl={false}
               pauseOnFocusLoss
               draggable
-              theme="light"
+              theme="colored"
               transition={Bounce}
+              className={"z-50"}
             />
           </div>
         </main>

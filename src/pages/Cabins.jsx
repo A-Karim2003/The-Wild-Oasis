@@ -1,14 +1,10 @@
 import DataTable from "@/features/cabins/DataTable";
-import { useQuery } from "@tanstack/react-query";
 import { columns } from "../features/cabins/columns";
 import CabinTableOperations from "@/features/cabins/CabinTableOperations";
-import { getCabins } from "@/services/apiCabins";
+import { useCabins } from "@/features/cabins/hooks/useCabins";
 
 export default function Cabins() {
-  const { isPending, error, data } = useQuery({
-    queryKey: ["cabins"],
-    queryFn: () => getCabins(),
-  });
+  const { isPending, error, data } = useCabins();
 
   if (isPending) return <h1>Loading...</h1>;
   if (isPending) return <h1>{error.message}</h1>;

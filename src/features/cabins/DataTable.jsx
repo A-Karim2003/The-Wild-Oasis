@@ -14,17 +14,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCabin } from "@/services/apiCabins";
-import { toast } from "react-toastify";
-import { useTheme } from "@/components/context/ThemeProvider";
+
 import { Button } from "@/components/ui/button";
 import AddCabinModal from "./AddCabinModal";
 import { Dialog } from "@radix-ui/react-dialog";
 import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useDeleteCabin } from "./hooks/useDeleteCabin";
 
 export default function DataTable({ data, columns }) {
-  const { theme } = useTheme();
   const [columnVisibility, setColumnVisibility] = useState({
     description: window.innerWidth >= 768,
   });
@@ -41,45 +38,7 @@ export default function DataTable({ data, columns }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const queryClient = useQueryClient();
-
-  const deleteCabinMutation = useMutation({
-    mutationFn: (id) => deleteCabin(id),
-
-    //* Runs before API call
-    onMutate: async (deletedId) => {
-      //? cancel ongoing fetches that can overwrite optimistic update
-      await queryClient.cancelQueries({ queryKey: ["cabins"] });
-
-      //? Snapshot the previous value
-      const oldCabins = queryClient.getQueryData({ queryKey: ["cabins"] });
-
-      //? Optimistically update to the new value
-      queryClient.setQueryData(["cabins"], (old) =>
-        old.filter((cabin) => cabin.id !== deletedId),
-      );
-
-      //* onMutateResult from onError will have access to oldCabins
-      return { oldCabins };
-    },
-    onSuccess: (deletedCabin) => {
-      toast.success(`Deleted ${deletedCabin.name}`, {
-        theme: theme,
-      });
-    },
-
-    //? Rollback on error
-    onError: (error, _, onMutateResult) => {
-      //? Restore the previous data before cache mutation
-      queryClient.setQueryData(["cabins"], onMutateResult.oldCabins);
-      console.error("Failed to delete cabin:", error.message);
-      toast.error("Failed to delete Cabin", {
-        theme: theme,
-      });
-    },
-
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["cabins"] }),
-  });
+  const deleteCabinMutation = useDeleteCabin();
 
   const table = useReactTable({
     data: data ?? [],

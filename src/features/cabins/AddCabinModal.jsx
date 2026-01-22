@@ -1,4 +1,3 @@
-import { useTheme } from "@/components/context/ThemeProvider";
 import { Button } from "@/components/ui/button";
 import {
   DialogClose,
@@ -7,16 +6,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
-
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { createCabin } from "@/services/apiCabins";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { useCreateCabin } from "./hooks/useCreateCabin";
 
 export default function AddCabinModal() {
-  const queryClient = useQueryClient();
-  const theme = useTheme();
   const {
     register,
     handleSubmit,
@@ -32,8 +27,8 @@ export default function AddCabinModal() {
     },
   });
 
-  function onSubmit(data) {
-    console.log(data);
+  function onSubmit(newCabin) {
+    console.log(newCabin);
     reset({
       cabinName: "",
       cabinCapacity: "",
@@ -41,46 +36,13 @@ export default function AddCabinModal() {
       cabinDiscount: 0,
       cabinDescription: "",
     });
+
+    addCabinMutation.mutate(newCabin);
   }
 
-  const addCabinMutation = useMutation({
-    mutationFn: async (newCabin) => await createCabin(newCabin),
+  const addCabinMutation = useCreateCabin();
 
-    onMutate: (newCabin) => {
-      //? cancel ongoing fetches that can overwrite optimistic update
-      queryClient.cancelQueries({ queryKey: ["cabins"] });
-
-      //? Snapshot the previous value for rollback
-      const oldCabins = queryClient.getQueryData({ queryKey: ["cabins"] });
-
-      //? create a mock version of the cabin that includes a temp ID
-      const optimisticCabin = { ...newCabin, id: Date.now() };
-
-      //? Optimistically update to the new value
-      queryClient.setQueryData(["cabins"], (old) => [...(old || ), newCabin]);
-
-      return { oldCabins };
-    },
-
-    onError: (error, newCabin, onMutateResult) => {
-      queryClient.setQueryData(["cabins"], onMutateResult.oldCabins);
-      console.error("Failed to add cabin:", error.message);
-      toast.error(`Failed to add ${newCabin.name} newCabin`, {
-        theme: theme,
-      });
-    },
-
-    onSuccess: (newCabin) => {
-      toast.success(`Added ${newCabin.name}`, {
-        theme: theme,
-      });
-    },
-
-    //? refetch changes from server
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-    },
-  });
+  console.log(errors);
 
   return (
     <>
@@ -117,11 +79,15 @@ export default function AddCabinModal() {
             placeholder="Enter cabin max capacity"
             {...register("cabinCapacity", {
               required: "Please enter cabin capacity",
+              min: {
+                value: 1,
+                message: "Capacity must be atleast 1",
+              },
             })}
           />
-          {errors.cabinName && (
+          {errors.cabinCapacity && (
             <span className="text-sm text-red-500 ml-1">
-              {errors.cabinName?.message}
+              {errors.cabinCapacity?.message}
             </span>
           )}
         </Field>
@@ -134,10 +100,14 @@ export default function AddCabinModal() {
             placeholder="Enter cabin price"
             {...register("cabinPrice", {
               required: "Please enter cabin price",
+              min: {
+                value: 50,
+                message: "A cabin must be atleast 50",
+              },
             })}
           />
 
-          {errors.cabinName && (
+          {errors.cabinPrice && (
             <span className="text-sm text-red-500 ml-1">
               {errors.cabinPrice?.message}
             </span>
@@ -163,9 +133,9 @@ export default function AddCabinModal() {
               required: "Please enter a cabin description",
             })}
           />
-          {errors.cabinName && (
+          {errors.cabinDescription && (
             <span className="text-sm text-red-500 ml-1">
-              {errors.cabinName?.message}
+              {errors.cabinDescription?.message}
             </span>
           )}
         </Field>

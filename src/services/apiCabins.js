@@ -24,23 +24,10 @@ export async function createCabin(newCabin) {
     .select()
     .single();
 
+  if (error) throw new Error(error.message);
+
   return data;
 }
-
-/*
-Example Data returned from insert:
-
-{
-  capacity: 6;
-  created_at: "2026-01-21T19:36:50.981345+00:00";
-  description: "A luxury timber cabin featuring a private hot tub.";
-  discount: 50;
-  id: 22;
-  image_url: "https://example.com/cabin-001.jpg";
-  name: "The Sequoia Retreat";
-  price: 250;
-}
-*/
 
 export async function deleteCabin(id) {
   const { error, data: cabin } = await supabase
