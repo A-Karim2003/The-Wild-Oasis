@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+console.log(supabase);
 
 export async function getCabins() {
   const { data: cabins, error } = await supabase.from("cabins").select("*");
@@ -9,6 +10,17 @@ export async function getCabins() {
 }
 
 export async function createCabin(newCabin) {
+  console.log(newCabin);
+
+  // https://pfxghidskavifshmnpzc.supabase.co/storage/v1/object/public/cabin-images/cabin-001.jpg
+
+  //?  Create a unique file name to avoid collisions
+  const imageName =
+    `${crypto.randomUUID()}-${newCabin.cabinPhoto.name}`.replace("/", "");
+  console.log("imageName", imageName);
+
+  //? Upload file to Supabase storage
+
   const { data, error } = await supabase
     .from("cabins")
     .insert([
@@ -18,7 +30,7 @@ export async function createCabin(newCabin) {
         price: Number(newCabin.cabinPrice),
         discount: Number(newCabin.cabinDiscount) || 0,
         description: newCabin.cabinDescription,
-        image_url: newCabin.cabinPhoto,
+        image_url: null,
       },
     ])
     .select()

@@ -15,6 +15,12 @@ export function useCreateCabin() {
       //? Snapshot the previous value for rollback
       const oldCabins = queryClient.getQueryData({ queryKey: ["cabins"] });
 
+      //? Create a temp preview URL when file is provided for optimistic UI updates
+      let imageUrl = null;
+      if (newCabin.cabinPhoto instanceof File) {
+        imageUrl = URL.createObjectURL(newCabin.cabinPhoto);
+      }
+
       //? create a mock version of the cabin that includes a temp ID
       const optimisticCabin = {
         id: Date.now(),
@@ -23,7 +29,7 @@ export function useCreateCabin() {
         price: Number(newCabin.cabinPrice),
         discount: Number(newCabin.cabinDiscount) || 0,
         description: newCabin.cabinDescription,
-        image_url: newCabin.cabinPhoto,
+        image_url: imageUrl,
       };
       //? Optimistically update to the new value
       queryClient.setQueryData(["cabins"], (old) => [
@@ -31,7 +37,8 @@ export function useCreateCabin() {
         optimisticCabin,
       ]);
 
-      return { oldCabins };
+      //? Add imageUrl for clean up
+      return { oldCabins, imageUrl };
     },
 
     onError: (error, newCabin, onMutateResult) => {
@@ -47,8 +54,11 @@ export function useCreateCabin() {
     },
 
     //? Sync back with server to get the real IDs and timestamps
-    onSettled: () => {
+    onSettled: (_data_, _error, _newCabin, context) => {
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
+
+      //? Revoke the temp object URL to free browser memory
+      if (context.imageUrl) URL.revokeObjectURL(context.imageUrl);
     },
   });
 }

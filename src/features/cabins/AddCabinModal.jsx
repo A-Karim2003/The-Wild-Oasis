@@ -28,9 +28,12 @@ export default function AddCabinModal() {
   });
 
   function onSubmit(newCabin) {
+    console.log(newCabin);
+    const photo = newCabin.cabinPhoto?.length ? newCabin.cabinPhoto[0] : null;
+
     addCabinMutation.mutate({
       ...newCabin,
-      cabinPhoto: newCabin.cabinPhoto?.[0],
+      cabinPhoto: photo,
     });
 
     reset({
