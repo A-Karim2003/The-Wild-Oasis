@@ -15,7 +15,7 @@ export default function AddCabinModal() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm({
     defaultValues: {
@@ -28,7 +28,11 @@ export default function AddCabinModal() {
   });
 
   function onSubmit(newCabin) {
-    console.log(newCabin);
+    addCabinMutation.mutate({
+      ...newCabin,
+      cabinPhoto: newCabin.cabinPhoto?.[0],
+    });
+
     reset({
       cabinName: "",
       cabinCapacity: "",
@@ -36,13 +40,9 @@ export default function AddCabinModal() {
       cabinDiscount: 0,
       cabinDescription: "",
     });
-
-    addCabinMutation.mutate(newCabin);
   }
 
   const addCabinMutation = useCreateCabin();
-
-  console.log(errors);
 
   return (
     <>
@@ -120,8 +120,17 @@ export default function AddCabinModal() {
             id="discount"
             type="number"
             placeholder="Enter cabin discount"
-            {...register("cabinDiscount")}
+            {...register("cabinDiscount", {
+              validate: (value, formValues) =>
+                Number(value) <= Number(formValues.cabinPrice) ||
+                "Discount cannot be higher than price",
+            })}
           />
+          {errors.cabinDiscount && (
+            <span className="text-sm text-red-500 ml-1">
+              {errors.cabinDiscount?.message}
+            </span>
+          )}
         </Field>
 
         <Field className="md:col-span-2">
@@ -145,6 +154,7 @@ export default function AddCabinModal() {
           <Input
             type="file"
             id="cabinPhoto"
+            accept="image/*"
             {...register("cabinPhoto")}
           ></Input>
         </Field>
@@ -160,7 +170,7 @@ export default function AddCabinModal() {
           type="submit"
           className={"bg-gold-bright"}
           form="cabin-form"
-          disabled={isSubmitting}
+          disabled={addCabinMutation.isPending}
         >
           Create new cabin
         </Button>
