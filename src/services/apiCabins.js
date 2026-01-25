@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
-
+const BUCKET_NAME = "cabin-images";
 export async function getCabins() {
   const { data: cabins, error } = await supabase.from("cabins").select("*");
 
@@ -7,8 +7,6 @@ export async function getCabins() {
 
   return cabins;
 }
-
-const BUCKET_NAME = "cabin-images";
 
 export async function createCabin(newCabin) {
   let publicImageUrl = null;
@@ -76,4 +74,57 @@ export async function deleteCabin(id) {
   if (error) throw new Error(error.message);
 
   return cabin;
+}
+
+export async function updateCabin(updatedCabin) {
+  let publicImageUrl = null; // generated from supabase
+  let newImageName = null; // manually constructed
+
+  if (updatedCabin.cabinPhoto) {
+    newImageName = `${crypto.randomUUID()}-${updatedCabin.cabinPhoto.name}`
+      .replaceAll("/", "")
+      .replaceAll("\\", "")
+      .replaceAll(" ", "-");
+
+    //? upload file to supabase storage bucket
+    const { error: storageError } = await supabase.storage
+      .from(BUCKET_NAME)
+      .upload(newImageName, updatedCabin.cabinPhoto);
+
+    if (storageError)
+      throw new Error(
+        "Cabin image could not be updated:",
+        storageError.message,
+      );
+
+    //? Get public image url
+    const { data: urlData } = supabase.storage
+      .from(BUCKET_NAME)
+      .getPublicUrl(newImageName);
+
+    publicImageUrl = urlData.publicUrl;
+  }
+
+  //? Update database
+  const { data, error } = await supabase
+    .from("cabins")
+    .update({
+      name: updatedCabin.cabinName,
+      capacity: Number(updatedCabin.cabinCapacity),
+      price: Number(updatedCabin.cabinPrice),
+      discount: Number(updatedCabin.cabinDiscount) || 0,
+      description: updatedCabin.cabinDescription,
+      ...(publicImageUrl && { image_url: publicImageUrl }),
+    })
+    .eq("id", updatedCabin.id)
+    .select()
+    .single();
+
+  if (error) {
+    if (newImageName)
+      await supabase.storage.from(BUCKET_NAME).remove([newImageName]);
+    throw new Error(error.message);
+  }
+
+  return data;
 }

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
-import AddCabinModal from "./AddCabinModal";
+import CabinModalForm from "./CabinModalForm";
 import { Dialog } from "@radix-ui/react-dialog";
 import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useDeleteCabin } from "./hooks/useDeleteCabin";
@@ -25,6 +25,22 @@ export default function DataTable({ data, columns }) {
   const [columnVisibility, setColumnVisibility] = useState({
     description: window.innerWidth >= 768,
   });
+
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    cabin: null,
+    isOpenForEdit: false,
+  });
+
+  //* function runs when the edit cabin button is clicked
+  function openForCreate(isOpen) {
+    setModalState({ isOpen: isOpen, cabin: null, isOpenForEdit: false });
+  }
+
+  //* Opens modal for edit
+  function openForEdit(cabin) {
+    setModalState({ isOpen: true, cabin, isOpenForEdit: true });
+  }
 
   useEffect(() => {
     function handleResize() {
@@ -49,7 +65,9 @@ export default function DataTable({ data, columns }) {
     getCoreRowModel: getCoreRowModel(),
 
     meta: {
-      deleteCabinMutation, //* columns now has access
+      //* columns now has access through info.table.options.meta
+      deleteCabinMutation,
+      onEdit: openForEdit,
     },
   });
 
@@ -94,7 +112,7 @@ export default function DataTable({ data, columns }) {
         </TableBody>
       </Table>
 
-      <Dialog>
+      <Dialog open={modalState.isOpen} onOpenChange={openForCreate}>
         <DialogTrigger asChild>
           <Button
             variant="outline"
@@ -104,7 +122,10 @@ export default function DataTable({ data, columns }) {
           </Button>
         </DialogTrigger>
         <DialogContent className="w-[90vw] max-w-300">
-          <AddCabinModal />
+          <CabinModalForm
+            modalState={modalState}
+            setModalState={setModalState}
+          />
         </DialogContent>
       </Dialog>
     </div>

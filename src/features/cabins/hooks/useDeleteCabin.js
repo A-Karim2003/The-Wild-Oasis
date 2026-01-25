@@ -15,7 +15,7 @@ export function useDeleteCabin() {
       await queryClient.cancelQueries({ queryKey: ["cabins"] });
 
       //? Snapshot the previous value
-      const oldCabins = queryClient.getQueryData({ queryKey: ["cabins"] });
+      const oldCabins = queryClient.getQueryData(["cabins"]);
 
       //? Optimistically update to the new value
       queryClient.setQueryData(["cabins"], (old) =>

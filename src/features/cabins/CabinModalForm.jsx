@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   DialogClose,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -10,32 +11,57 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { useCreateCabin } from "./hooks/useCreateCabin";
+import { useUpdateCabin } from "./hooks/useUpdateCabin";
 
-export default function AddCabinModal() {
+export default function CabinModalForm({ modalState, setModalState }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm({
-    defaultValues: {
-      cabinName: "Mountain View",
-      cabinCapacity: 4,
-      cabinPrice: 150,
-      cabinDiscount: 0,
-      cabinDescription: "A cozy cabin in the woods.",
-    },
+    //* Default values will depend on whether modal is open for create or edit
+    defaultValues: modalState.isOpenForEdit
+      ? {
+          cabinName: modalState.cabin.name,
+          cabinCapacity: modalState.cabin.capacity,
+          cabinPrice: modalState.cabin.price,
+          cabinDiscount: modalState.cabin.discount,
+          cabinDescription: modalState.cabin.description,
+        }
+      : {
+          cabinName: "Mountain View",
+          cabinCapacity: 4,
+          cabinPrice: 150,
+          cabinDiscount: 0,
+          cabinDescription: "A cozy cabin in the woods.",
+        },
   });
+  const addCabinMutation = useCreateCabin();
+  const updateCabinMutation = useUpdateCabin();
 
   function onSubmit(newCabin) {
-    console.log(newCabin);
     const photo = newCabin.cabinPhoto?.length ? newCabin.cabinPhoto[0] : null;
 
-    addCabinMutation.mutate({
-      ...newCabin,
-      cabinPhoto: photo,
-    });
-
+    if (modalState.isOpenForEdit) {
+      const updatedCabin = {
+        id: modalState.cabin.id,
+        cabinName: newCabin.cabinName,
+        cabinCapacity: newCabin.cabinCapacity,
+        cabinPrice: newCabin.cabinPrice,
+        cabinDiscount: newCabin.cabinDiscount,
+        cabinDescription: newCabin.cabinDescription,
+        //* Only include photo if a new one was uploaded
+        ...(photo && { cabinPhoto: photo }),
+      };
+      updateCabinMutation.mutate(updatedCabin);
+    } else {
+      // Cabin open for creation
+      addCabinMutation.mutate({
+        ...newCabin,
+        cabinPhoto: photo,
+      });
+    }
     reset({
       cabinName: "",
       cabinCapacity: "",
@@ -43,14 +69,21 @@ export default function AddCabinModal() {
       cabinDiscount: 0,
       cabinDescription: "",
     });
-  }
 
-  const addCabinMutation = useCreateCabin();
+    setModalState({ ...modalState, isOpen: false });
+  }
 
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Create A New Cabin</DialogTitle>
+        <DialogTitle>
+          {modalState.isOpenForEdit ? "Update Cabin" : "Create A New Cabin"}
+        </DialogTitle>
+        <DialogDescription>
+          {modalState.isOpenForEdit
+            ? "Edit an existing cabin's details, with current values pre-filled and optional photo replacement."
+            : "Create a new cabin by entering its details and optionally uploading a photo."}
+        </DialogDescription>
       </DialogHeader>
       <form
         id="cabin-form"
@@ -175,7 +208,7 @@ export default function AddCabinModal() {
           form="cabin-form"
           disabled={addCabinMutation.isPending}
         >
-          Create new cabin
+          {modalState.isOpenForEdit ? "Update cabin" : "Create new cabin"}
         </Button>
       </DialogFooter>
     </>

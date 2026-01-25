@@ -13,7 +13,7 @@ export function useCreateCabin() {
       await queryClient.cancelQueries({ queryKey: ["cabins"] });
 
       //? Snapshot the previous value for rollback
-      const oldCabins = queryClient.getQueryData({ queryKey: ["cabins"] });
+      const oldCabins = queryClient.getQueryData(["cabins"]);
 
       //? Create a temp preview URL when file is provided for optimistic UI updates
       let imageUrl = null;
@@ -31,6 +31,7 @@ export function useCreateCabin() {
         description: newCabin.cabinDescription,
         image_url: imageUrl,
       };
+
       //? Optimistically update to the new value
       queryClient.setQueryData(["cabins"], (old) => [
         ...(old || []),
@@ -46,7 +47,7 @@ export function useCreateCabin() {
       queryClient.setQueryData(["cabins"], onMutateResult.oldCabins);
 
       console.error("Failed to add cabin:", error.message);
-      toast.error(`Failed to add ${newCabin.cabinName} newCabin`);
+      toast.error(`Failed to add ${newCabin.cabinName}`);
     },
 
     onSuccess: (data) => {
