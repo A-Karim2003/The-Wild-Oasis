@@ -19,7 +19,6 @@ import { Button } from "@/components/ui/button";
 import CabinModalForm from "./CabinModalForm";
 import { Dialog } from "@radix-ui/react-dialog";
 import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { useDeleteCabin } from "./hooks/useDeleteCabin";
 
 export default function DataTable({ data, columns }) {
   const [columnVisibility, setColumnVisibility] = useState({
@@ -32,12 +31,12 @@ export default function DataTable({ data, columns }) {
     isOpenForEdit: false,
   });
 
-  //* function runs when the edit cabin button is clicked
+  //* function opens create cabin modal when Add new cabin button is clicked
   function openForCreate(isOpen) {
     setModalState({ isOpen: isOpen, cabin: null, isOpenForEdit: false });
   }
 
-  //* Opens modal for edit
+  //* function opens edit cabin modal when edit button is clicked
   function openForEdit(cabin) {
     setModalState({ isOpen: true, cabin, isOpenForEdit: true });
   }
@@ -54,8 +53,6 @@ export default function DataTable({ data, columns }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const deleteCabinMutation = useDeleteCabin();
-
   const table = useReactTable({
     data: data ?? [],
     state: {
@@ -66,7 +63,6 @@ export default function DataTable({ data, columns }) {
 
     meta: {
       //* columns now has access through info.table.options.meta
-      deleteCabinMutation,
       onEdit: openForEdit,
     },
   });

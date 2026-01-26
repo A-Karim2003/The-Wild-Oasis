@@ -9,10 +9,16 @@ export async function getCabins() {
 }
 
 export async function createCabin(newCabin) {
+  console.log(newCabin);
+
   let publicImageUrl = null;
   let imageName = null;
 
-  if (newCabin.cabinPhoto) {
+  // If cabinPhoto is a File → upload it, get public URL
+  // If cabinPhoto exists but isn't a File, it's as an existing URL so skip
+  // If cabinPhoto doesn't exist → publicImageUrl stays null
+
+  if (newCabin.cabinPhoto && newCabin.cabinPhoto instanceof File) {
     //?  Create a unique file name to avoid collisions
     imageName = `${crypto.randomUUID()}-${newCabin.cabinPhoto.name}`
       .replaceAll("/", "")
@@ -37,6 +43,7 @@ export async function createCabin(newCabin) {
       .getPublicUrl(imageName);
 
     publicImageUrl = urlData.publicUrl;
+  } else if (newCabin.cabinPhoto) {
   }
 
   const { data, error } = await supabase

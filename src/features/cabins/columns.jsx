@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Copy, EllipsisVertical, Pencil, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useDuplicateCabin } from "./hooks/useDuplicateCabin";
+import { useDeleteCabin } from "./hooks/useDeleteCabin";
 
 const headerStyles = "flex items-center gap-2 text-sm md:text-lg ";
 export const columns = [
@@ -68,7 +70,8 @@ export const columns = [
     header: () => <span className="sr-only">actions</span>,
     cell: (info) => {
       const cabin = info.row.original;
-      const { deleteCabinMutation } = info.table.options.meta;
+      const deleteCabinMutation = useDeleteCabin();
+      const duplicateCabinMutation = useDuplicateCabin();
       const { onEdit } = info.table.options.meta;
 
       return (
@@ -80,7 +83,9 @@ export const columns = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => duplicateCabinMutation.mutate(cabin)}
+            >
               <Copy />
               <span>Duplicated</span>
             </DropdownMenuItem>
