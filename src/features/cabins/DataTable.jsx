@@ -112,7 +112,7 @@ export default function DataTable({ data, columns }) {
         <DialogTrigger asChild>
           <Button
             variant="outline"
-            className="ml-auto py-2 px-8 border-gold-accent hover:border-slate-200 hover:bg-gold-accent"
+            className="ml-auto py-2 px-8 border-gold-accent hover:border-slate-200 hover:bg-gold-accent hover:text-primary"
           >
             Add new cabin
           </Button>
