@@ -41,7 +41,9 @@ export async function createCabin(newCabin) {
       .getPublicUrl(imageName);
 
     publicImageUrl = urlData.publicUrl;
-  } else if (newCabin.cabinPhoto) {
+  } else if (newCabin.cabinPhoto && typeof newCabin.cabinPhoto === "string") {
+    //* use existing image url if it exist
+    publicImageUrl = newCabin.cabinPhoto;
   }
 
   const { data, error } = await supabase

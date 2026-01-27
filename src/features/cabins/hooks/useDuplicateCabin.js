@@ -7,7 +7,7 @@ export function useDuplicateCabin() {
   return useMutation({
     mutationFn: (cabin) =>
       createCabin({
-        cabinName: cabin.name,
+        cabinName: `${!cabin.name.startsWith("Copy") ? "Copy of" : ""} ${cabin.name}`,
         cabinCapacity: cabin.capacity,
         cabinPrice: cabin.price,
         cabinDiscount: cabin.discount,
@@ -28,8 +28,12 @@ export function useDuplicateCabin() {
         ...cabinDuplicate,
         id: Date.now(),
         created_at: new Date().toISOString(),
-        name: `Copy of ${cabin.name}`,
+        name: !cabin.name.startsWith("Copy")
+          ? `Copy of ${cabin.name}`
+          : cabin.name,
       };
+
+      console.log(optimisticCabin);
 
       //? Optimistically cache
       queryClient.setQueryData(queryKey, (old) => [
@@ -41,7 +45,7 @@ export function useDuplicateCabin() {
       return { oldCabins };
     },
     onSuccess: (data) => {
-      toast.success(`Duplicated ${data.cabinName}`);
+      toast.success(`Duplicated ${data.name}`);
     },
 
     onError: (error, cabin, onMutateResult) => {
