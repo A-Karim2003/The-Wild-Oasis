@@ -9,8 +9,6 @@ export async function getCabins() {
 }
 
 export async function createCabin(newCabin) {
-  console.log(newCabin);
-
   let publicImageUrl = null;
   let imageName = null;
 
