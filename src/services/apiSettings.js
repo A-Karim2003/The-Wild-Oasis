@@ -9,14 +9,14 @@ export async function getSettings() {
 }
 
 export async function updateSettings(newSettings) {
-  console.log(newSettings);
-
-  return;
-
   const { data, error } = await supabase
     .from("settings")
     .update(newSettings)
-    .eq("id", newSettings.id)
+    .eq("id", 10)
     .select()
     .single();
+
+  if (error) throw new Error(error.message);
+
+  return data;
 }

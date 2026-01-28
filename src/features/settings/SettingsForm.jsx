@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
+import { useUpdateSettings } from "./hooks/useUpdateSettings";
 
 // Define your schema to match form fields
 const settingsSchema = z
@@ -24,20 +25,19 @@ const settingsSchema = z
   });
 
 export default function SettingsForm({ settings }) {
-  console.log(settings);
+  const updateSettingsMutation = useUpdateSettings();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: zodResolver(settingsSchema), // links the schema to form
     defaultValues: settings,
   });
 
   function onSubmit(data) {
-    reset();
+    updateSettingsMutation.mutate(data);
   }
 
   return (
