@@ -72,7 +72,7 @@ export const columns = [
       const cabin = info.row.original;
       const deleteCabinMutation = useDeleteCabin();
       const duplicateCabinMutation = useDuplicateCabin();
-      const { onEdit } = info.table.options.meta;
+      const { onEdit, onDelete } = info.table.options.meta;
 
       return (
         <DropdownMenu>
@@ -89,10 +89,12 @@ export const columns = [
               <Copy />
               <span>Duplicated</span>
             </DropdownMenuItem>
+
             <DropdownMenuItem onClick={() => onEdit(cabin)}>
               <Pencil />
               <span>Edit</span>
             </DropdownMenuItem>
+
             <DropdownMenuItem
               onClick={() => deleteCabinMutation.mutate(cabin.id)}
             >

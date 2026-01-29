@@ -31,6 +31,11 @@ export default function DataTable({ data, columns }) {
     isOpenForEdit: false,
   });
 
+  const [isOpenForDelete, setIsOpenForDelete] = useState({
+    isOpen: false,
+    cabin: null,
+  });
+
   //* function opens create cabin modal when Add new cabin button is clicked
   function openForCreate(isOpen) {
     setModalState({ isOpen: isOpen, cabin: null, isOpenForEdit: false });
@@ -39,6 +44,11 @@ export default function DataTable({ data, columns }) {
   //* function opens edit cabin modal when edit button is clicked
   function openForEdit(cabin) {
     setModalState({ isOpen: true, cabin, isOpenForEdit: true });
+  }
+
+  //* Opens a confirmation model when delete button is clicked
+  function openForDelete(isOpen) {
+    setIsOpenForDelete({ isOpen: isOpen });
   }
 
   useEffect(() => {
@@ -64,6 +74,7 @@ export default function DataTable({ data, columns }) {
     meta: {
       //* columns now has access through info.table.options.meta
       onEdit: openForEdit,
+      onDelete: openForDelete,
     },
   });
 
@@ -108,6 +119,7 @@ export default function DataTable({ data, columns }) {
         </TableBody>
       </Table>
 
+      {/* Modal for creating/editing a cabin */}
       <Dialog open={modalState.isOpen} onOpenChange={openForCreate}>
         <DialogTrigger asChild>
           <Button
@@ -124,6 +136,8 @@ export default function DataTable({ data, columns }) {
           />
         </DialogContent>
       </Dialog>
+
+      {/* Modal for Delete cabin formation */}
     </div>
   );
 }

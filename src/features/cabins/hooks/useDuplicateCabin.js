@@ -33,8 +33,6 @@ export function useDuplicateCabin() {
           : cabin.name,
       };
 
-      console.log(optimisticCabin);
-
       //? Optimistically cache
       queryClient.setQueryData(queryKey, (old) => [
         ...(old || []),
@@ -45,6 +43,7 @@ export function useDuplicateCabin() {
       return { oldCabins };
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["cabins"] });
       toast.success(`Duplicated ${data.name}`);
     },
 
