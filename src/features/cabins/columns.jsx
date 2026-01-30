@@ -70,9 +70,8 @@ export const columns = [
     header: () => <span className="sr-only">actions</span>,
     cell: (info) => {
       const cabin = info.row.original;
-      const deleteCabinMutation = useDeleteCabin();
       const duplicateCabinMutation = useDuplicateCabin();
-      const { onEdit, onDelete } = info.table.options.meta;
+      const { onEdit, setIsOpenForDelete } = info.table.options.meta;
 
       return (
         <DropdownMenu>
@@ -96,7 +95,9 @@ export const columns = [
             </DropdownMenuItem>
 
             <DropdownMenuItem
-              onClick={() => deleteCabinMutation.mutate(cabin.id)}
+              onClick={() => {
+                setIsOpenForDelete({ isOpen: true, cabin: cabin });
+              }}
             >
               <Trash />
               <span>Delete</span>

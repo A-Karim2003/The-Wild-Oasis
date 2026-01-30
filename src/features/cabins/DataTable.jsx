@@ -15,10 +15,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { AlertDialog } from "@/components/ui/alert-dialog";
+
 import { Button } from "@/components/ui/button";
 import CabinModalForm from "./CabinModalForm";
 import { Dialog } from "@radix-ui/react-dialog";
 import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
 export default function DataTable({ data, columns }) {
   const [columnVisibility, setColumnVisibility] = useState({
@@ -48,7 +51,7 @@ export default function DataTable({ data, columns }) {
 
   //* Opens a confirmation model when delete button is clicked
   function openForDelete(isOpen) {
-    setIsOpenForDelete({ isOpen: isOpen });
+    setIsOpenForDelete({ ...isOpenForDelete, isOpen: isOpen });
   }
 
   useEffect(() => {
@@ -74,7 +77,7 @@ export default function DataTable({ data, columns }) {
     meta: {
       //* columns now has access through info.table.options.meta
       onEdit: openForEdit,
-      onDelete: openForDelete,
+      setIsOpenForDelete,
     },
   });
 
@@ -138,6 +141,9 @@ export default function DataTable({ data, columns }) {
       </Dialog>
 
       {/* Modal for Delete cabin formation */}
+      <AlertDialog open={isOpenForDelete.isOpen} onOpenChange={openForDelete}>
+        <DeleteConfirmationModal cabin={isOpenForDelete.cabin} />
+      </AlertDialog>
     </div>
   );
 }
