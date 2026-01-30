@@ -9,8 +9,6 @@ import {
 import { Copy, EllipsisVertical, Pencil, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDuplicateCabin } from "./hooks/useDuplicateCabin";
-import { useDeleteCabin } from "./hooks/useDeleteCabin";
-
 const headerStyles = "flex items-center gap-2 text-sm md:text-lg ";
 export const columns = [
   {

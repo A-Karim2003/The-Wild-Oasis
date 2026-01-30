@@ -13,13 +13,11 @@ import { Button } from "@/components/ui/button";
 export default function DeleteConfirmationModal({ cabin }) {
   const deleteCabinMutation = useDeleteCabin();
 
-  console.log(cabin);
-
   return (
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle>
-          Are you sure you want to delete the {cabin.name} cabin?
+          Are you sure you want to delete the {cabin?.name} cabin?
         </AlertDialogTitle>
         <AlertDialogDescription>
           This action cannot be undone. This will permanently the row

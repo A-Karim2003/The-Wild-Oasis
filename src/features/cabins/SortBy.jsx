@@ -27,23 +27,20 @@ const dropdownItemClass = `
 `;
 
 const options = {
+  "name-asc": "Sort by name (Asc)",
+  "name-desc": "Sort by name (Desc)",
+
+  "price-asc": "Sort by price (Asc)",
+  "price-desc": "Sort by price (Desc)",
+
   "date-recent": "Sort by date (recent first)",
+
   "amount-high": "Sort by amount (highest first)",
   "amount-low": "Sort by amount (lowest first)",
 };
 
 export default function SortBy({ isMobileScreen }) {
   const [selectedMenu, setSelectedMenu] = useState("date-recent");
-  const [isSmall, setIsSmall] = useState(false);
-
-  //* Effect checks where screen size is greater/less than 768px
-  useEffect(() => {
-    const media = window.matchMedia("(max-width: 924px)");
-    const handleChange = () => setIsSmall(media.matches);
-    handleChange();
-    media.addEventListener("change", handleChange);
-    return () => media.removeEventListener("change", handleChange);
-  }, []);
 
   return (
     <DropdownMenu>
@@ -52,29 +49,57 @@ export default function SortBy({ isMobileScreen }) {
           isMobileScreen ? "text-xs" : "text-sm"
         }`}
       >
-        {isSmall && (
-          <span className="text-nowrap">
-            {options[selectedMenu].split("(")[0]}
-          </span>
-        )}
-
-        {!isSmall && (
-          <span className="text-nowrap"> {options[selectedMenu]}</span>
-        )}
+        <span className="text-nowrap"> {options[selectedMenu]}</span>
 
         <ChevronDown />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem
           className={dropdownItemClass}
+          onClick={() => setSelectedMenu("name-asc")}
+        >
+          Sort by name (Asc)
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          className={dropdownItemClass}
+          onClick={() => setSelectedMenu("name-desc")}
+        >
+          Sort by name (Desc)
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          className={dropdownItemClass}
+          onClick={() => setSelectedMenu("price-asc")}
+        >
+          Sort by price (Asc)
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          className={dropdownItemClass}
+          onClick={() => setSelectedMenu("price-desc")}
+        >
+          Sort by price (Desc)
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          className={dropdownItemClass}
           onClick={() => setSelectedMenu("date-recent")}
         >
           Sort by date (recent first)
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setSelectedMenu("amount-high")}>
+
+        <DropdownMenuItem
+          className={dropdownItemClass}
+          onClick={() => setSelectedMenu("amount-high")}
+        >
           Sort by amount (highest first)
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setSelectedMenu("amount-low")}>
+
+        <DropdownMenuItem
+          className={dropdownItemClass}
+          onClick={() => setSelectedMenu("amount-low")}
+        >
           Sort by amount (lowest first)
         </DropdownMenuItem>
       </DropdownMenuContent>
