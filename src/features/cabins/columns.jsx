@@ -10,7 +10,14 @@ import { Copy, EllipsisVertical, Pencil, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDuplicateCabin } from "./hooks/useDuplicateCabin";
 const headerStyles = "flex items-center gap-2 text-sm md:text-lg ";
+
 export const columns = [
+  // created_at column exist only for sorting
+  {
+    accessorKey: "created_at",
+    header: () => null,
+    cell: () => null,
+  },
   {
     accessorKey: "image_url",
     header: () => <div className={`${headerStyles}`}>Image</div>,

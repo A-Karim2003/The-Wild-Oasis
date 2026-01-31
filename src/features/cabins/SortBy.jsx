@@ -5,15 +5,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-
-const tabTriggerClass = `rounded-lg font-medium text-sm 
-    data-[state=active]:bg-gradient-to-br data-[state=active]:from-gold data-[state=active]:to-gold-accent
-    data-[state=active]:text-primary data-[state=active]:shadow-lg data-[state=active]:shadow-gold/25
-    data-[state=inactive]:text-gold-dark dark:data-[state=inactive]:text-gold-light/70
-    data-[state=inactive]:hover:text-gold data-[state=inactive]:hover:bg-gold/5
-    transition-all duration-300`;
+import { useCabinTable } from "./context/CabinTableProvider";
 
 const dropdownTriggerClass = `
 text-muted-foreground inline-flex h-9 w-fit items-center justify-center
@@ -35,12 +29,22 @@ const options = {
 
   "date-recent": "Sort by date (recent first)",
 
-  "amount-high": "Sort by amount (highest first)",
-  "amount-low": "Sort by amount (lowest first)",
+  "price-high": "Sort by price (highest first)",
+  "price-low": "Sort by price (lowest first)",
 };
 
 export default function SortBy({ isMobileScreen }) {
+  const { sortBy } = useCabinTable();
+
   const [selectedMenu, setSelectedMenu] = useState("date-recent");
+
+  function handleSort(key, id, desc) {
+    // Handles sorting state for table
+    sortBy(id, desc);
+
+    // Handles Dropdown ui
+    setSelectedMenu(key);
+  }
 
   return (
     <DropdownMenu>
@@ -49,58 +53,44 @@ export default function SortBy({ isMobileScreen }) {
           isMobileScreen ? "text-xs" : "text-sm"
         }`}
       >
-        <span className="text-nowrap"> {options[selectedMenu]}</span>
-
+        <span className="text-nowrap">{options[selectedMenu]}</span>
         <ChevronDown />
       </DropdownMenuTrigger>
+
       <DropdownMenuContent>
         <DropdownMenuItem
           className={dropdownItemClass}
-          onClick={() => setSelectedMenu("name-asc")}
+          onClick={() => handleSort("name-asc", "name", false)}
         >
           Sort by name (Asc)
         </DropdownMenuItem>
 
         <DropdownMenuItem
           className={dropdownItemClass}
-          onClick={() => setSelectedMenu("name-desc")}
+          onClick={() => handleSort("name-desc", "name", true)}
         >
           Sort by name (Desc)
         </DropdownMenuItem>
 
         <DropdownMenuItem
           className={dropdownItemClass}
-          onClick={() => setSelectedMenu("price-asc")}
-        >
-          Sort by price (Asc)
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          className={dropdownItemClass}
-          onClick={() => setSelectedMenu("price-desc")}
-        >
-          Sort by price (Desc)
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          className={dropdownItemClass}
-          onClick={() => setSelectedMenu("date-recent")}
+          onClick={() => handleSort("date-recent", "created_at", true)}
         >
           Sort by date (recent first)
         </DropdownMenuItem>
 
         <DropdownMenuItem
           className={dropdownItemClass}
-          onClick={() => setSelectedMenu("amount-high")}
+          onClick={() => handleSort("price-high", "price", true)}
         >
-          Sort by amount (highest first)
+          Sort by price (highest first)
         </DropdownMenuItem>
 
         <DropdownMenuItem
           className={dropdownItemClass}
-          onClick={() => setSelectedMenu("amount-low")}
+          onClick={() => handleSort("price-low", "price", false)}
         >
-          Sort by amount (lowest first)
+          Sort by price (lowest first)
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

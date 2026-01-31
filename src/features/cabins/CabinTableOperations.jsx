@@ -14,6 +14,7 @@ export default function CabinTableOperations() {
 
     return () => window.addEventListener("change", handle);
   }, []);
+
   return (
     <div className="flex gap-4 items-center flex-wrap">
       <Filter isMobileScreen={isScreenSmall} />

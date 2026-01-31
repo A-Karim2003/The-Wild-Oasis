@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -22,10 +23,14 @@ import CabinModalForm from "./CabinModalForm";
 import { Dialog } from "@radix-ui/react-dialog";
 import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import { useCabinTable } from "./context/CabinTableProvider";
 
 export default function DataTable({ data, columns }) {
+  const { sorting, setSorting } = useCabinTable();
+
   const [columnVisibility, setColumnVisibility] = useState({
     description: window.innerWidth >= 768,
+    created_at: false,
   });
 
   const [modalState, setModalState] = useState({
@@ -70,15 +75,18 @@ export default function DataTable({ data, columns }) {
     data: data ?? [],
     state: {
       columnVisibility,
+      sorting,
     },
     columns,
-    getCoreRowModel: getCoreRowModel(),
-
     meta: {
       //* columns now has access through info.table.options.meta
       onEdit: openForEdit,
       setIsOpenForDelete,
     },
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+
+    onSortingChange: setSorting,
   });
 
   return (
