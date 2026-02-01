@@ -4,13 +4,35 @@ const CabinTableContext = createContext();
 
 export default function CabinTableProvider({ children }) {
   const [sorting, setSorting] = useState([]);
+  const [columnFilters, setColumnFilters] = useState();
 
   function sortBy(id, desc) {
     setSorting([{ id, desc }]);
   }
+  function handleFilter(value) {
+    switch (value) {
+      case "with-discount":
+        setColumnFilters([{ id: "discount", value }]);
+        return;
+      case "no-discount":
+        setColumnFilters([{ id: "discount", value }]);
+        return;
+      case "all":
+        setColumnFilters([]);
+        return;
+    }
+  }
 
   return (
-    <CabinTableContext value={{ sorting, setSorting, sortBy }}>
+    <CabinTableContext
+      value={{
+        sorting,
+        setSorting,
+        sortBy,
+        columnFilters,
+        handleFilter,
+      }}
+    >
       {children}
     </CabinTableContext>
   );

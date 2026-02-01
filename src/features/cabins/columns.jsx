@@ -55,6 +55,14 @@ export const columns = [
   {
     accessorKey: "discount",
     header: () => <div className={`${headerStyles}`}>Discount</div>,
+    filterFn: (row, columnId, filterValue) => {
+      const discountValue = row.getValue(columnId);
+
+      if (filterValue === "with-discount") return discountValue > 0;
+      if (filterValue === "no-discount") return discountValue === 0;
+
+      return true; // All
+    },
     cell: (info) => (
       <span className={info.getValue() > 0 ? "text-green-700" : ""}>
         {formatCurrency(info.getValue())}

@@ -33,7 +33,7 @@ const options = {
   "price-low": "Sort by price (lowest first)",
 };
 
-export default function SortBy({ isMobileScreen }) {
+export default function SortBy() {
   const { sortBy } = useCabinTable();
 
   const [selectedMenu, setSelectedMenu] = useState("date-recent");
@@ -49,9 +49,7 @@ export default function SortBy({ isMobileScreen }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className={`${dropdownTriggerClass} px-4 flex items-center gap-4 ${
-          isMobileScreen ? "text-xs" : "text-sm"
-        }`}
+        className={`${dropdownTriggerClass} px-4 flex items-center gap-4 text-sm`}
       >
         <span className="text-nowrap">{options[selectedMenu]}</span>
         <ChevronDown />

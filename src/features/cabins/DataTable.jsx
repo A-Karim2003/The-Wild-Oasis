@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -26,7 +27,8 @@ import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import { useCabinTable } from "./context/CabinTableProvider";
 
 export default function DataTable({ data, columns }) {
-  const { sorting, setSorting } = useCabinTable();
+  const { sorting, columnFilters, setSorting, setColumnFilters } =
+    useCabinTable();
 
   const [columnVisibility, setColumnVisibility] = useState({
     description: window.innerWidth >= 768,
@@ -76,6 +78,7 @@ export default function DataTable({ data, columns }) {
     state: {
       columnVisibility,
       sorting,
+      columnFilters,
     },
     columns,
     meta: {
@@ -85,8 +88,10 @@ export default function DataTable({ data, columns }) {
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
 
     onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
   });
 
   return (

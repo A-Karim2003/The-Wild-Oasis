@@ -15,7 +15,7 @@ export default function Cabins() {
     <CabinTableProvider>
       <div className="flex-1 min-h-0 flex flex-col">
         <div className="mb-6 flex items-center justify-between gap-4">
-          <h2 className="text-4xl font-bold max-sm:hidden">All cabins</h2>
+          <h2 className="text-4xl font-bold max-[448px]:hidden">All cabins</h2>
           <CabinTableOperations />
         </div>
         <DataTable data={data} columns={columns} />

@@ -1,29 +1,28 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCabinTable } from "./context/CabinTableProvider";
 
-export default function Filter({ isMobileScreen }) {
-  const tabTriggerClass = `rounded-lg font-medium ${
-    isMobileScreen ? "text-xs" : "text-sm"
-  }
-    data-[state=active]:bg-gradient-to-br data-[state=active]:from-gold data-[state=active]:to-gold-accent
-    data-[state=active]:text-primary data-[state=active]:shadow-lg data-[state=active]:shadow-gold/25
-    data-[state=inactive]:text-gold-dark dark:data-[state=inactive]:text-gold-light/70
-    data-[state=inactive]:hover:text-gold data-[state=inactive]:hover:bg-gold/5
-    transition-all duration-300`;
+const tabTriggerClass = `rounded-lg font-medium text-sm data-[state=active]:bg-gradient-to-br data-[state=active]:from-gold data-[state=active]:to-gold-accent
+  data-[state=active]:text-primary data-[state=active]:shadow-lg data-[state=active]:shadow-gold/25
+  data-[state=inactive]:text-gold-dark dark:data-[state=inactive]:text-gold-light/70
+  data-[state=inactive]:hover:text-gold data-[state=inactive]:hover:bg-gold/5
+  transition-all duration-300`;
+
+export default function Filter() {
+  const { handleFilter } = useCabinTable();
 
   return (
-    <Tabs defaultValue="all">
+    <Tabs defaultValue="all" onValueChange={handleFilter}>
       <TabsList className="bg-gold-light/20 dark:bg-gold/10 rounded-xl border border-gold/20 dark:border-gold/30">
         <TabsTrigger value="all" className={tabTriggerClass}>
           All
         </TabsTrigger>
-        <TabsTrigger value="checkedOut" className={tabTriggerClass}>
-          Checked out
+
+        <TabsTrigger value="with-discount" className={tabTriggerClass}>
+          With Discount
         </TabsTrigger>
-        <TabsTrigger value="checkedIn" className={tabTriggerClass}>
-          Checked out
-        </TabsTrigger>
-        <TabsTrigger value="unconfirmed" className={tabTriggerClass}>
-          Unconfirmed
+
+        <TabsTrigger value="no-discount" className={tabTriggerClass}>
+          No Discount
         </TabsTrigger>
       </TabsList>
     </Tabs>
