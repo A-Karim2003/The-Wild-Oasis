@@ -25,10 +25,17 @@ import { Dialog } from "@radix-ui/react-dialog";
 import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import { useCabinTable } from "./context/CabinTableProvider";
+import { useSearchParams } from "react-router";
 
 export default function DataTable({ data, columns }) {
   const { sorting, columnFilters, setSorting, setColumnFilters } =
     useCabinTable();
+
+  const [searchParams] = useSearchParams();
+
+  //* Read values from URL
+  const sortBy = searchParams.get("sortBy") || "date-recent";
+  const filterBy = searchParams.get("discount") || "all";
 
   const [columnVisibility, setColumnVisibility] = useState({
     description: window.innerWidth >= 768,

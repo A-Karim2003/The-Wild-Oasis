@@ -1,13 +1,11 @@
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { useCabinTable } from "./context/CabinTableProvider";
+import { useSearchParams } from "react-router";
 
 const dropdownTriggerClass = `
 text-muted-foreground inline-flex h-9 w-fit items-center justify-center
@@ -34,16 +32,18 @@ const options = {
 };
 
 export default function SortBy() {
-  const { sortBy } = useCabinTable();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [selectedMenu, setSelectedMenu] = useState("date-recent");
+  // Read current sort from URL for and handles Dropdown ui
+  const currentSort = searchParams.get("sortBy") || "date-recent";
 
-  function handleSort(key, id, desc) {
-    // Handles sorting state for table
-    sortBy(id, desc);
-
-    // Handles Dropdown ui
-    setSelectedMenu(key);
+  //* Updates url when user selects a sort option
+  function handleSort(sortValue, id, desc) {
+    // sets param without replacing other search params
+    setSearchParams((params) => {
+      params.set("sortBy", sortValue);
+      return params;
+    });
   }
 
   return (
@@ -51,7 +51,7 @@ export default function SortBy() {
       <DropdownMenuTrigger
         className={`${dropdownTriggerClass} px-4 flex items-center gap-4 text-sm`}
       >
-        <span className="text-nowrap">{options[selectedMenu]}</span>
+        <span className="text-nowrap">{options[currentSort]}</span>
         <ChevronDown />
       </DropdownMenuTrigger>
 

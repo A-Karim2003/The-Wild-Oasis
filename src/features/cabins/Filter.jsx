@@ -1,5 +1,6 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCabinTable } from "./context/CabinTableProvider";
+import { useSearchParams } from "react-router";
 
 const tabTriggerClass = `rounded-lg font-medium text-sm data-[state=active]:bg-gradient-to-br data-[state=active]:from-gold data-[state=active]:to-gold-accent
   data-[state=active]:text-primary data-[state=active]:shadow-lg data-[state=active]:shadow-gold/25
@@ -8,10 +9,19 @@ const tabTriggerClass = `rounded-lg font-medium text-sm data-[state=active]:bg-g
   transition-all duration-300`;
 
 export default function Filter() {
-  const { handleFilter } = useCabinTable();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentFilter = searchParams.get("discount") || "all";
+
+  function handleFilter(value) {
+    setSearchParams((params) => {
+      if (value === "all") params.delete("discount");
+      else params.set("discount", value);
+      return params;
+    });
+  }
 
   return (
-    <Tabs defaultValue="all" onValueChange={handleFilter}>
+    <Tabs value={currentFilter} onValueChange={handleFilter}>
       <TabsList className="bg-gold-light/20 dark:bg-gold/10 rounded-xl border border-gold/20 dark:border-gold/30">
         <TabsTrigger value="all" className={tabTriggerClass}>
           All
