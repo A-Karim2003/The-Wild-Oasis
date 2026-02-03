@@ -7,14 +7,14 @@ const tabTriggerClass = `rounded-lg font-medium text-sm data-[state=active]:bg-g
   data-[state=inactive]:hover:text-gold data-[state=inactive]:hover:bg-gold/5
   transition-all duration-300`;
 
-export default function Filter() {
+export default function Filter({ filterOptions, paramName, defaultValue }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentFilter = searchParams.get("discount") || "all";
+  const currentFilter = searchParams.get(paramName) || defaultValue;
 
   function handleFilter(value) {
     setSearchParams((params) => {
-      if (value === "all") params.delete("discount");
-      else params.set("discount", value);
+      if (value === defaultValue) params.delete(paramName);
+      else params.set(paramName, value);
       return params;
     });
   }
@@ -22,17 +22,11 @@ export default function Filter() {
   return (
     <Tabs value={currentFilter} onValueChange={handleFilter}>
       <TabsList className="bg-gold-light/20 dark:bg-gold/10 rounded-xl border border-gold/20 dark:border-gold/30">
-        <TabsTrigger value="all" className={tabTriggerClass}>
-          All
-        </TabsTrigger>
-
-        <TabsTrigger value="with-discount" className={tabTriggerClass}>
-          With Discount
-        </TabsTrigger>
-
-        <TabsTrigger value="no-discount" className={tabTriggerClass}>
-          No Discount
-        </TabsTrigger>
+        {filterOptions.map((option) => (
+          <TabsTrigger value={option.value} className={tabTriggerClass}>
+            {option.label}
+          </TabsTrigger>
+        ))}
       </TabsList>
     </Tabs>
   );

@@ -31,17 +31,22 @@ const options = {
   "price-low": "Sort by price (lowest first)",
 };
 
-export default function SortBy() {
+export default function SortBy({ sortOptions, paramName, defaultValue }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Read current sort from URL for and handles Dropdown ui
-  const currentSort = searchParams.get("sortBy") || "date-recent";
+  const currentSort = searchParams.get(paramName) || defaultValue;
+
+  // Find the current option's label from the sortOptions array
+  const currentLabel = sortOptions.find(
+    (option) => option.value === currentSort,
+  )?.label;
 
   //* Updates url when user selects a sort option
   function handleSort(sortValue) {
     // sets param without replacing other search params
     setSearchParams((params) => {
-      params.set("sortBy", sortValue);
+      params.set(paramName, sortValue);
       return params;
     });
   }
@@ -51,45 +56,19 @@ export default function SortBy() {
       <DropdownMenuTrigger
         className={`${dropdownTriggerClass} px-4 flex items-center gap-4 text-sm`}
       >
-        <span className="text-nowrap">{options[currentSort]}</span>
+        <span className="text-nowrap">{currentLabel}</span>
         <ChevronDown />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>
-        <DropdownMenuItem
-          className={dropdownItemClass}
-          onClick={() => handleSort("name-asc", "name", false)}
-        >
-          Sort by name (Asc)
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          className={dropdownItemClass}
-          onClick={() => handleSort("name-desc", "name", true)}
-        >
-          Sort by name (Desc)
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          className={dropdownItemClass}
-          onClick={() => handleSort("date-recent", "created_at", true)}
-        >
-          Sort by date (recent first)
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          className={dropdownItemClass}
-          onClick={() => handleSort("price-high", "price", true)}
-        >
-          Sort by price (highest first)
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          className={dropdownItemClass}
-          onClick={() => handleSort("price-low", "price", false)}
-        >
-          Sort by price (lowest first)
-        </DropdownMenuItem>
+        {sortOptions.map((option) => (
+          <DropdownMenuItem
+            className={dropdownItemClass}
+            onClick={() => handleSort(option.value)}
+          >
+            {option.label}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
