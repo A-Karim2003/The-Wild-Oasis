@@ -58,6 +58,7 @@ export const columns = [
     filterFn: (row, columnId, filterValue) => {
       const discountValue = row.getValue(columnId);
 
+      //* only returns rows where condition returns true
       if (filterValue === "with-discount") return discountValue > 0;
       if (filterValue === "no-discount") return discountValue === 0;
 

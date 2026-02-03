@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import {
   flexRender,
@@ -24,18 +24,29 @@ import CabinModalForm from "./CabinModalForm";
 import { Dialog } from "@radix-ui/react-dialog";
 import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
-import { useCabinTable } from "./context/CabinTableProvider";
 import { useSearchParams } from "react-router";
 
+const sortConfig = {
+  "name-asc": [{ id: "name", desc: false }],
+  "name-desc": [{ id: "name", desc: true }],
+  "date-recent": [{ id: "created_at", desc: true }],
+  "price-high": [{ id: "price", desc: true }],
+  "price-low": [{ id: "price", desc: false }],
+};
 export default function DataTable({ data, columns }) {
-  const { sorting, columnFilters, setSorting, setColumnFilters } =
-    useCabinTable();
-
   const [searchParams] = useSearchParams();
 
   //* Read values from URL
   const sortBy = searchParams.get("sortBy") || "date-recent";
-  const filterBy = searchParams.get("discount") || "all";
+  const filterBy = searchParams.get("discount");
+
+  const sorting = useMemo(() => {
+    return sortConfig[sortBy] || sortConfig["date-recent"];
+  }, [sortBy]);
+
+  const columnFilters = useMemo(() => {
+    return filterBy ? [{ id: "discount", value: filterBy }] : [];
+  }, [filterBy]);
 
   const [columnVisibility, setColumnVisibility] = useState({
     description: window.innerWidth >= 768,
@@ -96,9 +107,6 @@ export default function DataTable({ data, columns }) {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
   });
 
   return (

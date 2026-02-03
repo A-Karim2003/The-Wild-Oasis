@@ -38,7 +38,7 @@ export default function SortBy() {
   const currentSort = searchParams.get("sortBy") || "date-recent";
 
   //* Updates url when user selects a sort option
-  function handleSort(sortValue, id, desc) {
+  function handleSort(sortValue) {
     // sets param without replacing other search params
     setSearchParams((params) => {
       params.set("sortBy", sortValue);

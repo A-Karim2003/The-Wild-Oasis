@@ -1,5 +1,4 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useCabinTable } from "./context/CabinTableProvider";
 import { useSearchParams } from "react-router";
 
 const tabTriggerClass = `rounded-lg font-medium text-sm data-[state=active]:bg-gradient-to-br data-[state=active]:from-gold data-[state=active]:to-gold-accent
