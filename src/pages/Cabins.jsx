@@ -15,6 +15,7 @@ export default function Cabins() {
 
   if (isPending) return <h1>Loading...</h1>;
   if (error) return <h1>{error.message}</h1>;
+
   return (
     <div className="flex-1 min-h-0 flex flex-col">
       <div className="mb-6 flex items-center justify-between gap-4">

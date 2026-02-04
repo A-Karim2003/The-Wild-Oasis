@@ -18,19 +18,6 @@ const dropdownItemClass = `
   transition-all duration-300
 `;
 
-const options = {
-  "name-asc": "Sort by name (Asc)",
-  "name-desc": "Sort by name (Desc)",
-
-  "price-asc": "Sort by price (Asc)",
-  "price-desc": "Sort by price (Desc)",
-
-  "date-recent": "Sort by date (recent first)",
-
-  "price-high": "Sort by price (highest first)",
-  "price-low": "Sort by price (lowest first)",
-};
-
 export default function SortBy({ sortOptions, paramName, defaultValue }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -63,6 +50,7 @@ export default function SortBy({ sortOptions, paramName, defaultValue }) {
       <DropdownMenuContent>
         {sortOptions.map((option) => (
           <DropdownMenuItem
+            key={option.value}
             className={dropdownItemClass}
             onClick={() => handleSort(option.value)}
           >

@@ -23,7 +23,11 @@ export default function Filter({ filterOptions, paramName, defaultValue }) {
     <Tabs value={currentFilter} onValueChange={handleFilter}>
       <TabsList className="bg-gold-light/20 dark:bg-gold/10 rounded-xl border border-gold/20 dark:border-gold/30">
         {filterOptions.map((option) => (
-          <TabsTrigger value={option.value} className={tabTriggerClass}>
+          <TabsTrigger
+            key={option.value}
+            value={option.value}
+            className={tabTriggerClass}
+          >
             {option.label}
           </TabsTrigger>
         ))}
