@@ -1,9 +1,9 @@
-import DataTable from "@/features/cabins/DataTable";
+import CabinDataTable from "@/features/cabins/CabinDataTable";
 import { columns } from "../features/cabins/columns";
 import TableOperations from "@/features/cabins/TableOperations";
 import { useCabins } from "@/features/cabins/hooks/useCabins";
-import Filter from "@/features/cabins/Filter";
-import SortBy from "@/features/cabins/SortBy";
+import Filter from "@/components/Filter";
+import SortBy from "@/components/SortBy";
 
 import {
   cabinFilterOptions,
@@ -33,7 +33,7 @@ export default function Cabins() {
           />
         </TableOperations>
       </div>
-      <DataTable data={data} columns={columns} />
+      <CabinDataTable data={data} columns={columns} />
     </div>
   );
 }

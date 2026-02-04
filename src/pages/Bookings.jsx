@@ -1,10 +1,12 @@
 import TableOperations from "@/features/cabins/TableOperations";
-import Filter from "@/features/cabins/Filter";
-import SortBy from "@/features/cabins/SortBy";
+import Filter from "@/components/Filter";
+import SortBy from "@/components/SortBy";
 import {
   bookingsFilterOptions,
   bookingsSortOptions,
 } from "@/features/bookings/bookingsOperationOptions/bookingOperationOptions";
+
+import BookingDataTable from "@/features/bookings/BookingDataTable";
 
 export default function Bookings() {
   return (
@@ -24,7 +26,8 @@ export default function Bookings() {
           />
         </TableOperations>
       </div>
-      {/* <DataTable data={data} columns={columns} /> */}
+
+      {/* <BookingDataTable table={table} columns={columns} /> */}
     </div>
   );
 }
