@@ -7,8 +7,15 @@ import {
 } from "@/features/bookings/bookingsOperationOptions/bookingOperationOptions";
 
 import BookingDataTable from "@/features/bookings/BookingDataTable";
+import useBookings from "@/features/bookings/hooks/useBookings";
 
 export default function Bookings() {
+  const { isPending, error, data } = useBookings();
+  console.log(data);
+
+  if (isPending) return <h1>Loading...</h1>;
+  if (error) return <h1>{error.message}</h1>;
+
   return (
     <div className="flex-1 min-h-0 flex flex-col">
       <div className="mb-6 flex items-center justify-between gap-4">
@@ -27,7 +34,7 @@ export default function Bookings() {
         </TableOperations>
       </div>
 
-      {/* <BookingDataTable table={table} columns={columns} /> */}
+      {/* <BookingDataTable data={data} columns={columns} /> */}
     </div>
   );
 }
