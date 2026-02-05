@@ -8,12 +8,15 @@ import {
 
 import BookingDataTable from "@/features/bookings/BookingDataTable";
 import useBookings from "@/features/bookings/hooks/useBookings";
+import { columns } from "@/features/bookings/columns";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Bookings() {
   const { isPending, error, data } = useBookings();
   console.log(data);
 
-  if (isPending) return <h1>Loading...</h1>;
+  if (isPending) return <Spinner className="size-18 text-amber-600 m-auto" />;
+
   if (error) return <h1>{error.message}</h1>;
 
   return (
@@ -34,7 +37,7 @@ export default function Bookings() {
         </TableOperations>
       </div>
 
-      {/* <BookingDataTable data={data} columns={columns} /> */}
+      <BookingDataTable data={data} columns={columns} />
     </div>
   );
 }

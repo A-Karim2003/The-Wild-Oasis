@@ -40,8 +40,14 @@ export default function TableRenderer({ table }) {
             </TableRow>
           ))
         ) : (
-          <TableRow colSpan={columns.length} className="h-24 text-center">
-            <TableCell colSpan={columns.length} className="h-24 text-center">
+          <TableRow
+            colSpan={table.getAllColumns().length}
+            className="h-24 text-center"
+          >
+            <TableCell
+              colSpan={table.getAllColumns().length}
+              className="h-24 text-center text-xl font-bold"
+            >
               No results.
             </TableCell>
           </TableRow>

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function useBookings() {
   return useQuery({
-    queryKey: ["cabins"],
+    queryKey: ["bookings"],
     queryFn: () => getBookings(),
   });
 }

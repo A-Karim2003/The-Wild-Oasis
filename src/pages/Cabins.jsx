@@ -9,11 +9,12 @@ import {
   cabinFilterOptions,
   cabinSortOptions,
 } from "@/features/cabins/cabinOperationOptions/cabinOperationOptions";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Cabins() {
   const { isPending, error, data } = useCabins();
 
-  if (isPending) return <h1>Loading...</h1>;
+  if (isPending) return <Spinner className="size-18 text-amber-600 m-auto" />;
   if (error) return <h1>{error.message}</h1>;
 
   return (
