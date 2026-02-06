@@ -1,12 +1,12 @@
 const headerStyles = "flex items-center gap-2 text-sm md:text-lg";
 
 const statusStyles = {
-  "checked-in":
-    "px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 border border-green-200",
-  "checked-out":
-    "px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200",
+  "checked in":
+    "text-xs font-semibold bg-green-100 text-green-800 border border-green-200",
+  "checked out":
+    "text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200",
   unconfirmed:
-    "px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800 border border-yellow-200",
+    "text-xs font-semibold bg-yellow-100 text-yellow-800 border border-yellow-200",
 };
 
 export const columns = [
@@ -23,23 +23,71 @@ export const columns = [
     accessorFn: (row) => row.guests?.name,
     id: "guest",
     header: () => <div className={headerStyles}>GUEST</div>,
-    cell: (info) => (
-      <span className="whitespace-normal">{info.getValue() || "N/A"}</span>
-    ),
+    cell: (info) => {
+      const email = info.row.original.guests.email;
+
+      return (
+        <div>
+          <span className="whitespace-normal">{info.getValue() || "N/A"}</span>
+
+          <span className="whitespace-normal">{email}</span>
+        </div>
+      );
+    },
   },
 
   {
-    accessorFn: (row) => row.start_date,
+    accessorKey: "start_date",
     id: "dates",
     header: () => <div className={headerStyles}>DATES</div>,
     cell: (info) => {
       const row = info.row.original;
-      const startDate = new Date(row.start_date).toLocaleDateString();
-      const endDate = new Date(row.end_date).toLocaleDateString();
+
+      const startDate = new Date(row.start_date);
+      const endDate = new Date(row.end_date);
+      const today = new Date();
+
+      // Calculate nights stay
+      const nights = Math.round((endDate - startDate) / (1000 * 60 * 60 * 24));
+
+      // Calculate time until booking from today
+      const daysUntil = Math.round((startDate - today) / (1000 * 60 * 60 * 24));
+      const yearsUntil = Math.floor(daysUntil / 365);
+
+      // Determine prefix text
+      let timeText = "";
+      if (yearsUntil > 0) {
+        if (daysUntil % 365 < 30) {
+          timeText = `In over ${yearsUntil} year${yearsUntil > 1 ? "s" : ""}`;
+        } else {
+          timeText = `In almost ${yearsUntil + 1} year${yearsUntil + 1 > 1 ? "s" : ""}`;
+        }
+      } else if (daysUntil > 0) {
+        timeText = `In ${daysUntil} day${daysUntil > 1 ? "s" : ""}`;
+      } else if (daysUntil === 0) {
+        timeText = "Today";
+      } else {
+        timeText = `${Math.abs(daysUntil)} day${Math.abs(daysUntil) > 1 ? "s" : ""} ago`;
+      }
+
+      // Format dates
+      const formatDate = (date) => {
+        return date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+      };
+
       return (
-        <span className="whitespace-normal">
-          {startDate} - {endDate}
-        </span>
+        <div className="whitespace-normal">
+          <div className="font-medium">
+            {timeText} → {nights} night{nights !== 1 ? "s" : ""} stay
+          </div>
+          <div className="text-sm text-muted-foreground">
+            {formatDate(startDate)} — {formatDate(endDate)}
+          </div>
+        </div>
       );
     },
   },
@@ -49,15 +97,19 @@ export const columns = [
     header: () => <div className={headerStyles}>STATUS</div>,
     cell: (info) => {
       const status = info.getValue();
-      console.log(status);
 
       return (
-        <span className="whitespace-normal capitalize">{info.getValue()}</span>
+        <span
+          className={`whitespace-normal uppercase px-3 py-1 rounded-full ${statusStyles[status]}`}
+        >
+          {info.getValue()}
+        </span>
       );
     },
   },
 
   {
+    // price and extras added for sorting purposes
     accessorFn: (row) => row.cabin_price + row.extras_price,
     id: "amount",
     header: () => <div className={headerStyles}>AMOUNT</div>,
