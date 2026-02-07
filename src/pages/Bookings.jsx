@@ -13,7 +13,6 @@ import { Spinner } from "@/components/ui/spinner";
 
 export default function Bookings() {
   const { isPending, error, data } = useBookings();
-  console.log(data);
 
   if (isPending) return <Spinner className="size-18 text-amber-600 m-auto" />;
 

@@ -3,6 +3,7 @@ import { Calendar, Home, Settings, Store, Users } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -16,6 +17,7 @@ import logoLight from "@/data/img/logo-light.png";
 import logoDark from "@/data/img/logo-dark.png";
 import { useTheme } from "@/components/context/ThemeProvider";
 import { Link, useLocation } from "react-router";
+import Uploader from "@/data/Uploader";
 
 const items = [
   {
@@ -89,6 +91,16 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <Uploader />
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarFooter>
     </Sidebar>
   );
 }

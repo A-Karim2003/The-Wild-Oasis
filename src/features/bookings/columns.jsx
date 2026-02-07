@@ -1,9 +1,9 @@
 const headerStyles = "flex items-center gap-2 text-sm md:text-lg";
 
 const statusStyles = {
-  "checked in":
+  "checked-in":
     "text-xs font-semibold bg-green-100 text-green-800 border border-green-200",
-  "checked out":
+  "checked-out":
     "text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200",
   unconfirmed:
     "text-xs font-semibold bg-yellow-100 text-yellow-800 border border-yellow-200",
@@ -14,9 +14,11 @@ export const columns = [
     accessorFn: (row) => row.cabins?.name,
     id: "cabin",
     header: () => <div className={headerStyles}>CABIN</div>,
-    cell: (info) => (
-      <span className="whitespace-normal">{info.getValue() || "N/A"}</span>
-    ),
+    cell: (info) => {
+      return (
+        <span className="whitespace-normal">{info.getValue() || "N/A"}</span>
+      );
+    },
   },
 
   {
@@ -24,13 +26,16 @@ export const columns = [
     id: "guest",
     header: () => <div className={headerStyles}>GUEST</div>,
     cell: (info) => {
-      const email = info.row.original.guests.email;
+      const guest = info.row.original.guests;
+
+      if (!guest) {
+        return <span className="text-muted-foreground">No guest data</span>;
+      }
 
       return (
-        <div>
-          <span className="whitespace-normal">{info.getValue() || "N/A"}</span>
-
-          <span className="whitespace-normal">{email}</span>
+        <div className="whitespace-normal">
+          <div className="font-medium">{guest.name}</div>
+          <div className="text-sm text-muted-foreground">{guest.email}</div>
         </div>
       );
     },
