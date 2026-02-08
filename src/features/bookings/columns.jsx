@@ -1,3 +1,13 @@
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { EllipsisVertical, Eye, SquareCheck, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
 const headerStyles = "flex items-center gap-2 text-sm md:text-lg";
 
 const statusStyles = {
@@ -121,5 +131,40 @@ export const columns = [
     cell: (info) => (
       <span className="whitespace-normal">${info.getValue().toFixed(2)}</span>
     ),
+  },
+
+  {
+    id: "actions",
+    header: () => <span className="sr-only">actions</span>,
+    cell: (info) => {
+      const { navigate } = info.table.options.meta;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-gray-200">
+              <EllipsisVertical className="size-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => navigate(`/bookings/123`)}>
+              <Eye />
+              <span>See details</span>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem>
+              <SquareCheck />
+              <span>Check in</span>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem>
+              <Trash2 />
+              <span>Delete booking</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
   },
 ];

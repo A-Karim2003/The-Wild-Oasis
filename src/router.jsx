@@ -8,6 +8,7 @@ import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 import PageNotFound from "./pages/PageNotFound";
 import ErrorPage from "./pages/ErrorPage";
+import BookingDetails from "./features/bookings/BookingDetails";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +18,13 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/dashboard" replace /> },
       { path: "dashboard", Component: Dashboard },
-      { path: "bookings", Component: Bookings },
+      {
+        path: "bookings",
+        children: [
+          { index: true, Component: Bookings },
+          { path: ":bookingId", Component: BookingDetails },
+        ],
+      },
       { path: "cabins", Component: Cabins },
       { path: "users", Component: Users },
       { path: "settings", Component: Settings },
