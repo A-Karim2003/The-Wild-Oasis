@@ -7,6 +7,7 @@ import {
 
 import { EllipsisVertical, Eye, SquareCheck, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/utils/helpers";
 
 const headerStyles = "flex items-center gap-2 text-sm md:text-lg";
 
@@ -129,7 +130,9 @@ export const columns = [
     id: "amount",
     header: () => <div className={headerStyles}>AMOUNT</div>,
     cell: (info) => (
-      <span className="whitespace-normal">${info.getValue().toFixed(2)}</span>
+      <span className="whitespace-normal">
+        {formatCurrency(info.getValue())}
+      </span>
     ),
   },
 
@@ -138,6 +141,8 @@ export const columns = [
     header: () => <span className="sr-only">actions</span>,
     cell: (info) => {
       const { navigate } = info.table.options.meta;
+      const data = info.row.original;
+      // console.log(data);
 
       return (
         <DropdownMenu>
@@ -148,12 +153,14 @@ export const columns = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => navigate(`/bookings/123`)}>
+            <DropdownMenuItem onClick={() => navigate(`/bookings/${data.id}`)}>
               <Eye />
               <span>See details</span>
             </DropdownMenuItem>
 
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => navigate(`/bookings/checkin/${data.id}`)}
+            >
               <SquareCheck />
               <span>Check in</span>
             </DropdownMenuItem>

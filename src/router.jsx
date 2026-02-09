@@ -23,6 +23,8 @@ const router = createBrowserRouter([
         children: [
           { index: true, Component: Bookings },
           { path: ":bookingId", Component: BookingDetails },
+
+          { path: "checkin/:bookingId", Component: BookingDetails },
         ],
       },
       { path: "cabins", Component: Cabins },

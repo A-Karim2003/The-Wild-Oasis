@@ -18,8 +18,6 @@ export default function Bookings() {
 
   if (error) return <h1>{error.message}</h1>;
 
-  console.log(data);
-
   return (
     <div className="flex-1 min-h-0 flex flex-col">
       <div className="mb-6 flex items-center justify-between gap-4">

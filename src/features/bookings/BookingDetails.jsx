@@ -7,14 +7,48 @@ import {
   DollarSign,
   MoveLeft,
 } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import useBooking from "./hooks/useBooking";
+import { Spinner } from "@/components/ui/spinner";
+import { format } from "date-fns";
+import {
+  formatCurrency,
+  formatDistanceFromNow,
+  subtractDates,
+} from "@/utils/helpers";
+import { CheckInForm } from "./CheckInForm";
 
 export default function BookingDetails() {
   const navigate = useNavigate();
+  const { bookingId } = useParams();
+
+  const { data: booking, isPending, error } = useBooking(bookingId);
+
+  if (isPending) return <Spinner className="size-18 text-amber-600 m-auto" />;
+  if (error) return <p>{error.message}</p>;
+
+  const {
+    id,
+    start_date,
+    end_date,
+    num_of_guests,
+    cabin_price,
+    extras_price,
+    hasBreakfast,
+    observations,
+    created_at,
+    cabins,
+    guests,
+    isPaid,
+  } = booking;
+
+  const numNights = subtractDates(end_date, start_date);
+  const totalPrice = cabin_price + extras_price;
+
   return (
     <div className="w-full ">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold">Booking #2719</h2>
+        <h2 className="text-3xl font-bold">Booking #{id}</h2>
 
         <Button
           variant="ghost"
@@ -25,14 +59,19 @@ export default function BookingDetails() {
           Back
         </Button>
       </div>
+
       {/* Header Card */}
       <Card className="p-0 my-6">
-        <div className="bg-gold-accent  text-white rounded-lg p-4 flex items-start gap-4">
+        <div className="bg-gold-accent text-white rounded-lg p-4 flex items-start gap-4">
           <Home className="w-6 h-6" />
           <div>
-            <h2 className="text-xl font-semibold">3 nights in Cabin 008</h2>
+            <h2 className="text-xl font-semibold">
+              {numNights} nights in {cabins.name}
+            </h2>
             <p className="text-indigo-100 mt-1">
-              Fri, Dec 27 2030 (in almost 5 years) — Mon, Dec 30 2030
+              {format(new Date(start_date), "EEE, MMM dd yyyy")} (
+              {formatDistanceFromNow(start_date)}) —{" "}
+              {format(new Date(end_date), "EEE, MMM dd yyyy")}
             </p>
           </div>
         </div>
@@ -41,32 +80,38 @@ export default function BookingDetails() {
           <div className="space-y-4">
             <div className="flex items-center gap-3 text-gray-700">
               <img
-                src="https://flagcdn.com/w40/br.png"
-                alt="Brazil flag"
+                src={guests.country_flag}
+                alt={`${guests.name} flag`}
                 className="w-6 h-4"
               />
-              <span className="font-medium">rises sky + 9 guests</span>
+              <span className="font-medium">
+                {guests.name} + {num_of_guests - 1} guests
+              </span>
               <span className="text-gray-400">•</span>
-              <span>risessky@gmail.com</span>
+              <span>{guests.email}</span>
               <span className="text-gray-400">•</span>
-              <span>Nationality ID asghar</span>
+              <span>Nationality ID {guests.nationality_id}</span>
             </div>
 
             {/* Observations */}
-            <div className="flex items-start gap-3 text-gray-700 ">
-              <MessageSquare className="text-gold-accent size-3xl" />
-              <div className="flex items-center gap-5">
-                <span className="font-medium">Observations</span>
-                <p className="text-gray-600">yess i am asghar</p>
+            {observations && (
+              <div className="flex items-start gap-3 text-gray-700">
+                <MessageSquare className="text-gold-accent size-3xl" />
+                <div className="flex items-center gap-5">
+                  <span className="font-medium">Observations</span>
+                  <p className="text-gray-600">{observations}</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Breakfast */}
             <div className="flex items-center gap-3 text-gray-700">
               <Utensils className="text-gold-accent size-3xl" />
               <div>
                 <span className="font-medium">Breakfast included?</span>
-                <span className="ml-4 text-gray-600">No</span>
+                <span className="ml-4 text-gray-600">
+                  {hasBreakfast ? "Yes" : "No"}
+                </span>
               </div>
             </div>
           </div>
@@ -78,18 +123,18 @@ export default function BookingDetails() {
               <div>
                 <span className="text-gray-600">Total price</span>
                 <span className="ml-4 text-xl font-semibold text-gray-900">
-                  $4,200.00
+                  {formatCurrency(totalPrice)}
                 </span>
               </div>
             </div>
             <span className="text-yellow-700 font-semibold">
-              WILL PAY AT PROPERTY
+              {isPaid ? "PAID" : "WILL PAY AT PROPERTY"}
             </span>
           </div>
 
           {/* Booking Timestamp */}
           <div className="text-right text-sm text-gray-500">
-            Booked Tue, May 13 2025, 12:08 PM
+            Booked {format(new Date(created_at), "EEE, MMM dd yyyy, hh:mm a")}
           </div>
         </div>
       </Card>
