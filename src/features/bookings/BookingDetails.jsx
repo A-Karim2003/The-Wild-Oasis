@@ -7,22 +7,28 @@ import {
   DollarSign,
   MoveLeft,
 } from "lucide-react";
+import { useNavigate } from "react-router";
 
 export default function BookingDetails() {
+  const navigate = useNavigate();
   return (
     <div className="w-full ">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold">Booking #2719</h2>
 
-        <Button variant="ghost" className={"flex items-center gap-2"}>
-          <MoveLeft />
+        <Button
+          variant="ghost"
+          className={"flex items-center gap-2 cursor-pointer"}
+          onClick={() => navigate(-1)}
+        >
+          <MoveLeft className="text-gold-accent size-3xl " />
           Back
         </Button>
       </div>
       {/* Header Card */}
       <Card className="p-0 my-6">
-        <div className="bg-indigo-600  text-white rounded-lg p-4 flex items-start gap-4">
-          <Home className="w-6 h-6 mt-1" />
+        <div className="bg-gold-accent  text-white rounded-lg p-4 flex items-start gap-4">
+          <Home className="w-6 h-6" />
           <div>
             <h2 className="text-xl font-semibold">3 nights in Cabin 008</h2>
             <p className="text-indigo-100 mt-1">
@@ -48,7 +54,7 @@ export default function BookingDetails() {
 
             {/* Observations */}
             <div className="flex items-start gap-3 text-gray-700 ">
-              <MessageSquare />
+              <MessageSquare className="text-gold-accent size-3xl" />
               <div className="flex items-center gap-5">
                 <span className="font-medium">Observations</span>
                 <p className="text-gray-600">yess i am asghar</p>
@@ -57,7 +63,7 @@ export default function BookingDetails() {
 
             {/* Breakfast */}
             <div className="flex items-center gap-3 text-gray-700">
-              <Utensils />
+              <Utensils className="text-gold-accent size-3xl" />
               <div>
                 <span className="font-medium">Breakfast included?</span>
                 <span className="ml-4 text-gray-600">No</span>

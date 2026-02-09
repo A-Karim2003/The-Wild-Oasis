@@ -8,3 +8,10 @@ export async function getBookings() {
 
   return data;
 }
+
+export async function getBooking(id) {
+  let { data, error } = await supabase
+    .from("bookings")
+    .select("*, cabin(*), guest()")
+    .eq("id", id);
+}
