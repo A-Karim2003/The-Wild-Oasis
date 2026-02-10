@@ -9,6 +9,7 @@ import Account from "./pages/Account";
 import PageNotFound from "./pages/PageNotFound";
 import ErrorPage from "./pages/ErrorPage";
 import BookingDetails from "./features/bookings/BookingDetails";
+import CheckInBooking from "./features/bookings/CheckInBooking";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,11 @@ const router = createBrowserRouter([
           { index: true, Component: Bookings },
           { path: ":bookingId", Component: BookingDetails },
 
-          { path: "checkin/:bookingId", Component: BookingDetails },
+          {
+            path: "checkin/:bookingId",
+            Component: CheckInBooking,
+            // loader: checkInLoader,
+          },
         ],
       },
       { path: "cabins", Component: Cabins },

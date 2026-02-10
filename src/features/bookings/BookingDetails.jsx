@@ -16,15 +16,16 @@ import {
   formatDistanceFromNow,
   subtractDates,
 } from "@/utils/helpers";
-import { CheckInForm } from "./CheckInForm";
+import { getBooking } from "@/services/apiBookings";
 
-export default function BookingDetails() {
+export default function BookingDetails({ showActions = true, children }) {
   const navigate = useNavigate();
   const { bookingId } = useParams();
 
   const { data: booking, isPending, error } = useBooking(bookingId);
 
   if (isPending) return <Spinner className="size-18 text-amber-600 m-auto" />;
+
   if (error) return <p>{error.message}</p>;
 
   const {
@@ -140,13 +141,30 @@ export default function BookingDetails() {
       </Card>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-end gap-3">
-        <Button variant="default" className="bg-indigo-600 hover:bg-indigo-700">
-          Check in
-        </Button>
-        <Button variant="destructive">Delete booking</Button>
-        <Button variant="outline">Back</Button>
-      </div>
+
+      {showActions && (
+        <div className="flex items-center justify-end gap-3">
+          <Button
+            variant="default"
+            className="bg-indigo-600 hover:bg-indigo-700"
+          >
+            Check in
+          </Button>
+          <Button variant="destructive">Delete booking</Button>
+          <Button variant="outline">Back</Button>
+        </div>
+      )}
+
+      {children}
     </div>
   );
 }
+
+// export async function loader({ params }) {
+//   // fetch bookings
+//   const booking = await getBooking(params.bookingId);
+
+//   if (booking.status !== "unconfirmed") {
+//     throw redirect(`/bookings/${params.bookingId}`);
+//   }
+// }

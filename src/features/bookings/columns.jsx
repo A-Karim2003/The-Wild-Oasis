@@ -141,8 +141,7 @@ export const columns = [
     header: () => <span className="sr-only">actions</span>,
     cell: (info) => {
       const { navigate } = info.table.options.meta;
-      const data = info.row.original;
-      // console.log(data);
+      const { id, status } = info.row.original;
 
       return (
         <DropdownMenu>
@@ -153,17 +152,19 @@ export const columns = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => navigate(`/bookings/${data.id}`)}>
+            <DropdownMenuItem onClick={() => navigate(`/bookings/${id}`)}>
               <Eye />
               <span>See details</span>
             </DropdownMenuItem>
 
-            <DropdownMenuItem
-              onClick={() => navigate(`/bookings/checkin/${data.id}`)}
-            >
-              <SquareCheck />
-              <span>Check in</span>
-            </DropdownMenuItem>
+            {status === "unconfirmed" && (
+              <DropdownMenuItem
+                onClick={() => navigate(`/bookings/checkin/${id}`)}
+              >
+                <SquareCheck />
+                <span>Check in</span>
+              </DropdownMenuItem>
+            )}
 
             <DropdownMenuItem>
               <Trash2 />
