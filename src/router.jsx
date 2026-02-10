@@ -8,7 +8,9 @@ import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 import PageNotFound from "./pages/PageNotFound";
 import ErrorPage from "./pages/ErrorPage";
-import BookingDetails from "./features/bookings/BookingDetails";
+import BookingDetails, {
+  loader as checkInLoader,
+} from "./features/bookings/BookingDetails";
 import CheckInBooking from "./features/bookings/CheckInBooking";
 
 const router = createBrowserRouter([
@@ -28,7 +30,7 @@ const router = createBrowserRouter([
           {
             path: "checkin/:bookingId",
             Component: CheckInBooking,
-            // loader: checkInLoader,
+            loader: checkInLoader,
           },
         ],
       },

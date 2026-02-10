@@ -21,6 +21,7 @@ export async function getBooking(id) {
       extras_price,
       status,
       hasBreakfast,
+      isPaid,
       observations,
       created_at,
       cabins(name),

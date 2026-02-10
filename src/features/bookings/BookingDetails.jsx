@@ -7,7 +7,7 @@ import {
   DollarSign,
   MoveLeft,
 } from "lucide-react";
-import { useNavigate, useParams } from "react-router";
+import { redirect, useNavigate, useParams } from "react-router";
 import useBooking from "./hooks/useBooking";
 import { Spinner } from "@/components/ui/spinner";
 import { format } from "date-fns";
@@ -21,7 +21,6 @@ import { getBooking } from "@/services/apiBookings";
 export default function BookingDetails({ showActions = true, children }) {
   const navigate = useNavigate();
   const { bookingId } = useParams();
-
   const { data: booking, isPending, error } = useBooking(bookingId);
 
   if (isPending) return <Spinner className="size-18 text-amber-600 m-auto" />;
@@ -118,11 +117,13 @@ export default function BookingDetails({ showActions = true, children }) {
           </div>
 
           {/* Price Card */}
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 flex items-center justify-between">
+          <div
+            className={`${isPaid ? "bg-green-200" : "border-yellow-200"} rounded-lg p-6 flex items-center justify-between`}
+          >
             <div className="flex items-center gap-3">
               <DollarSign className="w-6 h-6 text-yellow-700" />
+              <span className="text-gray-600">Total price</span>
               <div>
-                <span className="text-gray-600">Total price</span>
                 <span className="ml-4 text-xl font-semibold text-gray-900">
                   {formatCurrency(totalPrice)}
                 </span>
@@ -160,11 +161,13 @@ export default function BookingDetails({ showActions = true, children }) {
   );
 }
 
-// export async function loader({ params }) {
-//   // fetch bookings
-//   const booking = await getBooking(params.bookingId);
+// used to guard route.
+export async function loader({ params }) {
+  const booking = await getBooking(params.bookingId);
 
-//   if (booking.status !== "unconfirmed") {
-//     throw redirect(`/bookings/${params.bookingId}`);
-//   }
-// }
+  if (booking.status !== "unconfirmed") {
+    throw redirect(`/bookings/${params.bookingId}`);
+  }
+
+  return null;
+}
