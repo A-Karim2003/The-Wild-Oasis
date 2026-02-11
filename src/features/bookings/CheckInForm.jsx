@@ -10,6 +10,7 @@ import useSettings from "../settings/hooks/useSettings";
 import { formatCurrency } from "@/utils/helpers";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
+import useUpdateBooking from "./hooks/useUpdateBooking";
 
 export function CheckInForm() {
   const navigate = useNavigate();
@@ -47,8 +48,10 @@ export function CheckInForm() {
   } = bookingsData;
   const { breakfast_price, isPaid } = settingsData;
 
-  let totalPrice = cabin_price + extras_price;
+  const totalPrice = cabin_price + extras_price;
 
+  const { isPending, mutate } = useUpdateBooking();
+  //! Complete the mutation
   return (
     <FieldGroup>
       <FieldLabel>
@@ -87,6 +90,12 @@ export function CheckInForm() {
         <Button
           className="bg-gold-accent text-primary-foreground"
           disabled={!confirmPaid}
+          onClick={() => {
+            mutate({
+              bookingId,
+              updatedFields: { status: "checked-in", isPaid: true },
+            });
+          }}
         >
           Check in booking #{bookingId}
         </Button>

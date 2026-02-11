@@ -118,7 +118,7 @@ export default function BookingDetails({ showActions = true, children }) {
 
           {/* Price Card */}
           <div
-            className={`${isPaid ? "bg-green-200" : "border-yellow-200"} rounded-lg p-6 flex items-center justify-between`}
+            className={`${isPaid ? "bg-green-200" : "bg-yellow-200"} rounded-lg p-6 flex items-center justify-between`}
           >
             <div className="flex items-center gap-3">
               <DollarSign className="w-6 h-6 text-yellow-700" />

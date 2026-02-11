@@ -35,3 +35,19 @@ export async function getBooking(id) {
 
   return data;
 }
+
+export async function updateBooking(id, updatedFields) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .update(updatedFields)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+
+  return data;
+}
