@@ -18,6 +18,8 @@ export function CheckInForm() {
   const [confirmPaid, setConfirmPaid] = useState(false);
   const { bookingId } = useParams();
 
+  const { isPending, mutate } = useUpdateBooking();
+
   const {
     data: bookingsData,
     isPending: isBookingPending,
@@ -44,14 +46,14 @@ export function CheckInForm() {
   const {
     cabin_price,
     extras_price,
+    isPaid,
     guests: { name },
   } = bookingsData;
-  const { breakfast_price, isPaid } = settingsData;
+  const { breakfast_price } = settingsData;
+  console.log(isPaid);
 
   const totalPrice = cabin_price + extras_price;
 
-  const { isPending, mutate } = useUpdateBooking();
-  //! Complete the mutation
   return (
     <FieldGroup>
       <FieldLabel>
@@ -89,10 +91,10 @@ export function CheckInForm() {
       <div className="flex items-center justify-end mt-4 gap-4">
         <Button
           className="bg-gold-accent text-primary-foreground"
-          disabled={!confirmPaid}
+          disabled={!confirmPaid || isPending}
           onClick={() => {
             mutate({
-              bookingId,
+              id: bookingId,
               updatedFields: { status: "checked-in", isPaid: true },
             });
           }}
