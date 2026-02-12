@@ -1,5 +1,3 @@
-"use client";
-
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
@@ -14,88 +12,119 @@ import useUpdateBooking from "./hooks/useUpdateBooking";
 
 export function CheckInForm() {
   const navigate = useNavigate();
-  const [breakfastAdded, setBreakfastAdded] = useState(false);
-  const [confirmPaid, setConfirmPaid] = useState(false);
   const { bookingId } = useParams();
 
-  const { isPending, mutate } = useUpdateBooking();
+  const [addBreakfast, setAddBreakfast] = useState(false);
+  const [confirmPaid, setConfirmPaid] = useState(false);
 
+  const { isPending, mutate } = useUpdateBooking();
   const {
     data: bookingsData,
     isPending: isBookingPending,
-    BookingError,
+    error: bookingError,
   } = useBooking(bookingId);
-
   const {
     data: settingsData,
     isPending: isSettingsPending,
-    settingsError,
+    error: settingsError,
   } = useSettings();
 
+  // Sync state with database once data is loaded
   useEffect(() => {
     if (bookingsData) {
-      setConfirmPaid(bookingsData.isPaid);
+      setConfirmPaid(bookingsData.isPaid ?? false);
+      setAddBreakfast(bookingsData.hasBreakfast ?? false);
     }
-  }, [bookingsData.isPaid]);
+  }, [bookingsData]);
 
   if (isBookingPending || isSettingsPending)
     return <Spinner className="size-14 text-amber-600 m-auto" />;
 
-  if (BookingError || settingsError) return <p>{error.message}</p>;
+  if (bookingError || settingsError) return <p>Error loading data...</p>;
 
   const {
     cabin_price,
     extras_price,
-    isPaid,
+    num_of_guests,
+    hasBreakfast: databaseHasBreakfast,
     guests: { name },
+    start_date,
+    end_date,
   } = bookingsData;
-  const { breakfast_price } = settingsData;
-  console.log(isPaid);
 
-  const totalPrice = cabin_price + extras_price;
+  const { breakfast_price } = settingsData;
+
+  // Calculate stay duration
+  const numNights = Math.ceil(
+    (new Date(end_date).getTime() - new Date(start_date).getTime()) /
+      (1000 * 60 * 60 * 24),
+  );
+
+  // Price Logic
+  const optionalBreakfastPrice = breakfast_price * numNights * num_of_guests;
+  const baseTotalPrice = cabin_price + extras_price;
+
+  // If they are adding breakfast now (and didn't have it before), add to total
+  const finalPrice =
+    addBreakfast && !databaseHasBreakfast
+      ? baseTotalPrice + optionalBreakfastPrice
+      : baseTotalPrice;
 
   return (
     <FieldGroup>
-      <FieldLabel>
+      {/* 1. Only show "Add Breakfast" if they don't already have it in DB */}
+      {!databaseHasBreakfast && (
         <Field orientation="horizontal">
           <Checkbox
-            id="addBreakfast-checkbox"
-            name="terms-checkbox"
-            onCheckedChange={(isChecked) => setBreakfastAdded(isChecked)}
+            id="addBreakfast"
+            checked={addBreakfast}
+            onCheckedChange={(checked) => {
+              setAddBreakfast(!!checked);
+              setConfirmPaid(false); // Reset confirmation because price changed
+            }}
           />
-          <Label htmlFor="addBreakfast-checkbox">
-            Want to add breakfast for {formatCurrency(breakfast_price)}
+          <Label htmlFor="addBreakfast">
+            Want to add breakfast for {formatCurrency(optionalBreakfastPrice)}?
           </Label>
         </Field>
-      </FieldLabel>
+      )}
 
-      <FieldLabel>
-        <Field orientation="horizontal">
-          <Checkbox
-            id="terms-checkbox-2"
-            name="terms-checkbox-2"
-            onCheckedChange={(isChecked) => setConfirmPaid(isChecked)}
-            disabled={isPaid || confirmPaid}
-            checked={confirmPaid}
-          />
-          <FieldLabel htmlFor="terms-checkbox-2">
-            {breakfastAdded &&
-              `I confirm that  ${name} has paid the total amount of ${formatCurrency(totalPrice + breakfast_price)} (${formatCurrency(totalPrice)} + ${formatCurrency(breakfast_price)})`}
-
-            {!breakfastAdded &&
-              `I confirm that ${name} has paid the total amount of ${formatCurrency(totalPrice)}`}
-          </FieldLabel>
-        </Field>
-      </FieldLabel>
+      <Field orientation="horizontal">
+        <Checkbox
+          id="confirm"
+          checked={confirmPaid}
+          // Disable if already paid in DB AND they haven't added new breakfast
+          disabled={confirmPaid && !addBreakfast}
+          onCheckedChange={(checked) => setConfirmPaid(!!checked)}
+        />
+        <FieldLabel htmlFor="confirm">
+          I confirm that {name} has paid the total amount of{" "}
+          {formatCurrency(finalPrice)}
+          {addBreakfast &&
+            !databaseHasBreakfast &&
+            ` (${formatCurrency(baseTotalPrice)} + ${formatCurrency(optionalBreakfastPrice)})`}
+        </FieldLabel>
+      </Field>
 
       <div className="flex items-center justify-end mt-4 gap-4">
         <Button
           className="bg-gold-accent text-primary-foreground"
           disabled={!confirmPaid || isPending}
           onClick={() => {
+            const updatePayload = {
+              status: "checked-in",
+              isPaid: true,
+              // If they added breakfast just now, update those fields too
+              ...(addBreakfast &&
+                !databaseHasBreakfast && {
+                  hasBreakfast: true,
+                  extras_price: extras_price + optionalBreakfastPrice,
+                }),
+            };
+
             mutate({
               id: bookingId,
-              updatedFields: { status: "checked-in", isPaid: true },
+              updatedFields: updatePayload,
             });
           }}
         >
