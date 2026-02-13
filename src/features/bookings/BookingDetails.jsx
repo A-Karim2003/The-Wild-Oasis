@@ -17,11 +17,14 @@ import {
   subtractDates,
 } from "@/utils/helpers";
 import { getBooking } from "@/services/apiBookings";
+import useCheckout from "./hooks/useCheckout";
 
 export default function BookingDetails({ showActions = true, children }) {
   const navigate = useNavigate();
   const { bookingId } = useParams();
   const { data: booking, isPending, error } = useBooking(bookingId);
+  const { mutate: checkoutMutation, isPending: isCheckoutPending } =
+    useCheckout();
 
   if (isPending) return <Spinner className="size-18 text-amber-600 m-auto" />;
 
@@ -40,7 +43,10 @@ export default function BookingDetails({ showActions = true, children }) {
     cabins,
     guests,
     isPaid,
+    status,
   } = booking;
+
+  console.log(status);
 
   const numNights = subtractDates(end_date, start_date);
   const totalPrice = cabin_price + extras_price;
@@ -145,14 +151,24 @@ export default function BookingDetails({ showActions = true, children }) {
 
       {showActions && (
         <div className="flex items-center justify-end gap-3">
-          <Button
-            variant="default"
-            className="bg-indigo-600 hover:bg-indigo-700"
-          >
-            Check in
+          {status === "checked-in" && (
+            <Button
+              variant="default"
+              className="bg-indigo-600 hover:bg-indigo-700"
+              onClick={() => checkoutMutation(id)}
+            >
+              {isCheckoutPending && <Spinner />}
+              Check out
+            </Button>
+          )}
+
+          <Button variant="destructive">
+            <span>Delete booking</span>
           </Button>
-          <Button variant="destructive">Delete booking</Button>
-          <Button variant="outline">Back</Button>
+
+          <Button variant="outline" onClick={() => navigate("/bookings")}>
+            Back
+          </Button>
         </div>
       )}
 

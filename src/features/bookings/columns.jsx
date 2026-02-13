@@ -5,9 +5,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { EllipsisVertical, Eye, SquareCheck, Trash2 } from "lucide-react";
+import { EllipsisVertical, Eye, SquareCheck, Trash2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/utils/helpers";
+import { Spinner } from "@/components/ui/spinner";
 
 const headerStyles = "flex items-center gap-2 text-sm md:text-lg";
 
@@ -143,6 +144,12 @@ export const columns = [
       const { navigate } = info.table.options.meta;
       const { id, status } = info.row.original;
 
+      const { mutate: checkoutMutation, isPending } =
+        info.table.options.meta.checkout;
+
+      const { deleteBookingMutation, isDeletePending } =
+        info.table.options.meta.bookingsMutation;
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -168,16 +175,20 @@ export const columns = [
 
             {status === "checked-in" && (
               <DropdownMenuItem
-              // onClick={() => navigate(`/bookings/checkin/${id}`)}
+                onClick={() => checkoutMutation(id)}
+                disabled={isPending}
               >
+                {isPending && <Spinner />}
+
                 <Lock />
                 <span>Check out</span>
               </DropdownMenuItem>
             )}
 
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => deleteBookingMutation(id)}>
+              {isDeletePending && <Spinner />}
               <Trash2 />
-              <span>Delete booking</span>
+              <span>Delete</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

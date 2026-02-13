@@ -51,3 +51,24 @@ export async function updateBooking(id, updatedFields) {
 
   return data;
 }
+
+export async function deleteBooking(id) {
+  console.log(id);
+
+  return;
+  const { data, error } = await supabase
+    .from("bookings")
+    .delete("*")
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+
+  console.log("Deleted:", data);
+
+  return data;
+}

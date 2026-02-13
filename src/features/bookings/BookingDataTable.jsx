@@ -9,6 +9,8 @@ import {
 } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router";
+import useCheckout from "./hooks/useCheckout";
+import useDeleteBooking from "./hooks/useDeleteBooking";
 
 const sortConfig = {
   "date-recent": [{ id: "dates", desc: true }],
@@ -18,6 +20,10 @@ const sortConfig = {
 };
 export default function BookingDataTable({ data, columns }) {
   const navigate = useNavigate();
+  const { mutate, isPending } = useCheckout();
+  const { mutate: deleteBookingMutation, isPending: isDeletePending } =
+    useDeleteBooking();
+
   const [searchParams] = useSearchParams();
 
   //* applys columns filtering
@@ -46,6 +52,11 @@ export default function BookingDataTable({ data, columns }) {
     },
     meta: {
       navigate,
+      checkout: { mutate, isPending },
+      bookingsMutation: {
+        deleteBookingMutation,
+        isDeletePending,
+      },
     },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),

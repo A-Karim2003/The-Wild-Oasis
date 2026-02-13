@@ -1,11 +1,9 @@
 import { updateBooking } from "@/services/apiBookings";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
-export default function useCheckin() {
+export default function useCheckout() {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   return useMutation({
     mutationFn: (id) =>
@@ -14,19 +12,13 @@ export default function useCheckin() {
       }),
 
     onSuccess: (data) => {
-      //? Invalidate the specific booking
-      queryClient.invalidateQueries({ queryKey: ["booking", data.id] });
-
-      //? Invalidate the bookings list (so the table updates)
-      queryClient.invalidateQueries({ queryKey: ["bookings"] });
-
+      //? Invalidate all queries
+      queryClient.invalidateQueries();
       toast.success(`Succcesfully checked out #${data.id}`);
-
-      navigate(`/bookings/${data.id}`);
     },
 
     onError: (error, variable) => {
-      console.error("Failed to update Booking:", error.message);
+      console.error("Failed to check out:", error.message);
       toast.error(`Failed to check out ${variable.id}`);
     },
   });
