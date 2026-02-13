@@ -166,6 +166,15 @@ export const columns = [
               </DropdownMenuItem>
             )}
 
+            {status === "checked-in" && (
+              <DropdownMenuItem
+              // onClick={() => navigate(`/bookings/checkin/${id}`)}
+              >
+                <Lock />
+                <span>Check out</span>
+              </DropdownMenuItem>
+            )}
+
             <DropdownMenuItem>
               <Trash2 />
               <span>Delete booking</span>

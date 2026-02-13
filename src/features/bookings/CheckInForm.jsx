@@ -8,7 +8,7 @@ import useSettings from "../settings/hooks/useSettings";
 import { formatCurrency } from "@/utils/helpers";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
-import useUpdateBooking from "./hooks/useUpdateBooking";
+import useCheckin from "./hooks/useCheckin";
 
 export function CheckInForm() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export function CheckInForm() {
   const [addBreakfast, setAddBreakfast] = useState(false);
   const [confirmPaid, setConfirmPaid] = useState(false);
 
-  const { isPending, mutate } = useUpdateBooking();
+  const { isPending, mutate } = useCheckin();
   const {
     data: bookingsData,
     isPending: isBookingPending,
