@@ -147,8 +147,7 @@ export const columns = [
       const { mutate: checkoutMutation, isPending } =
         info.table.options.meta.checkout;
 
-      const { deleteBookingMutation, isDeletePending } =
-        info.table.options.meta.bookingsMutation;
+      const { setIsOpenForDelete } = info.table.options.meta;
 
       return (
         <DropdownMenu>
@@ -185,8 +184,11 @@ export const columns = [
               </DropdownMenuItem>
             )}
 
-            <DropdownMenuItem onClick={() => deleteBookingMutation(id)}>
-              {isDeletePending && <Spinner />}
+            <DropdownMenuItem
+              onClick={() =>
+                setIsOpenForDelete((prev) => ({ isOpen: true, bookingId: id }))
+              }
+            >
               <Trash2 />
               <span>Delete</span>
             </DropdownMenuItem>

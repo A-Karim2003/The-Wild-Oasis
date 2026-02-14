@@ -16,6 +16,7 @@ import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import { useSearchParams } from "react-router";
 import TableRenderer from "@/components/TableRenderer";
+import { useDeleteCabin } from "./hooks/useDeleteCabin";
 
 const sortConfig = {
   "name-asc": [{ id: "name", desc: false }],
@@ -26,6 +27,7 @@ const sortConfig = {
 };
 export default function CabinDataTable({ data, columns }) {
   const [searchParams] = useSearchParams();
+  const { mutate } = useDeleteCabin();
 
   //* Read values from URL
   const sortBy = searchParams.get("sortBy") || "date-recent";
@@ -124,7 +126,11 @@ export default function CabinDataTable({ data, columns }) {
 
       {/* Modal for Delete cabin formation */}
       <AlertDialog open={isOpenForDelete.isOpen} onOpenChange={openForDelete}>
-        <DeleteConfirmationModal cabin={isOpenForDelete.cabin} />
+        <DeleteConfirmationModal
+          data={isOpenForDelete.cabin}
+          mutate={mutate}
+          type={"cabins"}
+        />
       </AlertDialog>
     </div>
   );

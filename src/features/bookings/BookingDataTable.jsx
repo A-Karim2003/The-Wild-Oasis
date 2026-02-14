@@ -7,10 +7,12 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import useCheckout from "./hooks/useCheckout";
 import useDeleteBooking from "./hooks/useDeleteBooking";
+import { AlertDialog } from "@/components/ui/alert-dialog";
+import DeleteConfirmationModal from "../cabins/DeleteConfirmationModal";
 
 const sortConfig = {
   "date-recent": [{ id: "dates", desc: true }],
@@ -23,6 +25,10 @@ export default function BookingDataTable({ data, columns }) {
   const { mutate, isPending } = useCheckout();
   const { mutate: deleteBookingMutation, isPending: isDeletePending } =
     useDeleteBooking();
+  const [isOpenForDelete, setIsOpenForDelete] = useState({
+    isOpen: false,
+    bookingId: null,
+  });
 
   const [searchParams] = useSearchParams();
 
@@ -38,6 +44,11 @@ export default function BookingDataTable({ data, columns }) {
   const sorting = useMemo(() => sortConfig[sortBy], [sortBy]);
 
   const pageIndex = parseInt(searchParams.get("page") || 0);
+
+  //* function for managing delete modal state
+  function handleOpenForDelete(isOpen) {
+    setIsOpenForDelete({ ...isOpenForDelete, isOpen: isOpen });
+  }
 
   const table = useReactTable({
     data,
@@ -57,6 +68,7 @@ export default function BookingDataTable({ data, columns }) {
         deleteBookingMutation,
         isDeletePending,
       },
+      setIsOpenForDelete,
     },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -68,6 +80,18 @@ export default function BookingDataTable({ data, columns }) {
     <div className="rounded-md min-h-0  flex-1 flex flex-col gap-5">
       <TableRenderer table={table} />
       <PaginationControls table={table} />
+
+      {/* Modal for Deleting booking */}
+      <AlertDialog
+        open={isOpenForDelete.isOpen}
+        onOpenChange={handleOpenForDelete}
+      >
+        <DeleteConfirmationModal
+          data={isOpenForDelete.bookingId}
+          type={"bookings"}
+          mutate={deleteBookingMutation}
+        />
+      </AlertDialog>
     </div>
   );
 }

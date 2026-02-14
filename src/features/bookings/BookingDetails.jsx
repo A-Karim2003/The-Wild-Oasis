@@ -155,7 +155,7 @@ export default function BookingDetails({ showActions = true, children }) {
           {status === "checked-in" && (
             <Button
               variant="default"
-              className="bg-indigo-600 hover:bg-indigo-700"
+              className="bg-gold-dark"
               onClick={() => checkoutMutation(id)}
             >
               {isCheckoutPending && <Spinner />}
