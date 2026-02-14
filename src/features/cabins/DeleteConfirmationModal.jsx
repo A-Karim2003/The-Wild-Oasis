@@ -20,8 +20,6 @@ export default function ({ data, mutate, type }) {
       break;
   }
 
-  console.log(type, id);
-
   return (
     <AlertDialogContent>
       <AlertDialogHeader>

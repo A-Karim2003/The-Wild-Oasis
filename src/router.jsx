@@ -12,12 +12,15 @@ import BookingDetails, {
   loader as checkInLoader,
 } from "./features/bookings/BookingDetails";
 import CheckInBooking from "./features/bookings/CheckInBooking";
+import Login from "./pages/Login";
 
 const router = createBrowserRouter([
+  { path: "login", Component: Login },
   {
     path: "/",
     Component: RootLayout,
     errorElement: <ErrorPage />,
+
     children: [
       { index: true, element: <Navigate to="/dashboard" replace /> },
       { path: "dashboard", Component: Dashboard },
