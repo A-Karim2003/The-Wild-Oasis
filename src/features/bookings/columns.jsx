@@ -186,7 +186,7 @@ export const columns = [
 
             <DropdownMenuItem
               onClick={() =>
-                setIsOpenForDelete((prev) => ({ isOpen: true, bookingId: id }))
+                setIsOpenForDelete({ isOpen: true, bookingId: id })
               }
             >
               <Trash2 />

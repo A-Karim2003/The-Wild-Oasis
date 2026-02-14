@@ -19,6 +19,9 @@ import {
 import { getBooking } from "@/services/apiBookings";
 import useCheckout from "./hooks/useCheckout";
 import useDeleteBooking from "./hooks/useDeleteBooking";
+import { AlertDialog } from "@/components/ui/alert-dialog";
+import DeleteConfirmationModal from "../cabins/DeleteConfirmationModal";
+import { useState } from "react";
 
 export default function BookingDetails({ showActions = true, children }) {
   const navigate = useNavigate();
@@ -28,6 +31,11 @@ export default function BookingDetails({ showActions = true, children }) {
     useCheckout();
   const { mutate: deleteBookingMutation, isPending: isDeletePending } =
     useDeleteBooking();
+
+  const [isOpenForDelete, setIsOpenForDelete] = useState({
+    isOpen: false,
+    bookingId: null,
+  });
 
   if (isPending) return <Spinner className="size-18 text-amber-600 m-auto" />;
 
@@ -51,6 +59,11 @@ export default function BookingDetails({ showActions = true, children }) {
 
   const numNights = subtractDates(end_date, start_date);
   const totalPrice = cabin_price + extras_price;
+
+  //* function for managing delete modal state
+  function handleOpenForDelete(isOpen) {
+    setIsOpenForDelete({ ...isOpenForDelete, isOpen: isOpen });
+  }
 
   return (
     <div className="w-full ">
@@ -166,7 +179,7 @@ export default function BookingDetails({ showActions = true, children }) {
           <Button
             className={"cursor-pointer"}
             variant="destructive"
-            onClick={() => deleteBookingMutation(id)}
+            onClick={() => setIsOpenForDelete({ isOpen: true, bookingId: id })}
           >
             {isDeletePending && <Spinner />}
             <span>Delete booking</span>
@@ -179,6 +192,18 @@ export default function BookingDetails({ showActions = true, children }) {
           >
             Back
           </Button>
+
+          {/* Modal for Deleting booking */}
+          <AlertDialog
+            open={isOpenForDelete.isOpen}
+            onOpenChange={handleOpenForDelete}
+          >
+            <DeleteConfirmationModal
+              data={isOpenForDelete.bookingId}
+              type={"bookings"}
+              mutate={deleteBookingMutation}
+            />
+          </AlertDialog>
         </div>
       )}
 

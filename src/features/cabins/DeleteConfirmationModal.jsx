@@ -9,7 +9,19 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
-export default function DeleteConfirmationModal({ data, mutate, type }) {
+export default function ({ data, mutate, type }) {
+  let id;
+  switch (type) {
+    case "cabins":
+      id = data?.id;
+      break;
+    case "bookings":
+      id = data;
+      break;
+  }
+
+  console.log(type, id);
+
   return (
     <AlertDialogContent>
       <AlertDialogHeader>
@@ -33,7 +45,7 @@ export default function DeleteConfirmationModal({ data, mutate, type }) {
         <AlertDialogCancel>Cancel</AlertDialogCancel>
         <AlertDialogAction
           asChild
-          onClick={() => mutate(data)}
+          onClick={() => mutate(id)}
           className="bg-red-600 hover:bg-red-700"
         >
           <Button>Continue</Button>
