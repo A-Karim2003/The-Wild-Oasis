@@ -18,6 +18,7 @@ import {
 } from "@/utils/helpers";
 import { getBooking } from "@/services/apiBookings";
 import useCheckout from "./hooks/useCheckout";
+import useDeleteBooking from "./hooks/useDeleteBooking";
 
 export default function BookingDetails({ showActions = true, children }) {
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ export default function BookingDetails({ showActions = true, children }) {
   const { data: booking, isPending, error } = useBooking(bookingId);
   const { mutate: checkoutMutation, isPending: isCheckoutPending } =
     useCheckout();
+  const { mutate: deleteBookingMutation, isPending: isDeletePending } =
+    useDeleteBooking();
 
   if (isPending) return <Spinner className="size-18 text-amber-600 m-auto" />;
 
@@ -45,8 +48,6 @@ export default function BookingDetails({ showActions = true, children }) {
     isPaid,
     status,
   } = booking;
-
-  console.log(status);
 
   const numNights = subtractDates(end_date, start_date);
   const totalPrice = cabin_price + extras_price;
@@ -162,11 +163,20 @@ export default function BookingDetails({ showActions = true, children }) {
             </Button>
           )}
 
-          <Button variant="destructive">
+          <Button
+            className={"cursor-pointer"}
+            variant="destructive"
+            onClick={() => deleteBookingMutation(id)}
+          >
+            {isDeletePending && <Spinner />}
             <span>Delete booking</span>
           </Button>
 
-          <Button variant="outline" onClick={() => navigate("/bookings")}>
+          <Button
+            variant="outline"
+            onClick={() => navigate("/bookings")}
+            className={"cursor-pointer"}
+          >
             Back
           </Button>
         </div>

@@ -53,9 +53,6 @@ export async function updateBooking(id, updatedFields) {
 }
 
 export async function deleteBooking(id) {
-  console.log(id);
-
-  return;
   const { data, error } = await supabase
     .from("bookings")
     .delete("*")
@@ -67,8 +64,6 @@ export async function deleteBooking(id) {
     console.log(error);
     throw new Error(error.message);
   }
-
-  console.log("Deleted:", data);
 
   return data;
 }
