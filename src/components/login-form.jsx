@@ -12,12 +12,28 @@ import { Input } from "@/components/ui/input";
 import { useTheme } from "./context/ThemeProvider";
 import logoLight from "@/data/img/logo-light.png";
 import logoDark from "@/data/img/logo-dark.png";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useLogin } from "@/features/authentication/hooks/useLogin";
 
 export function LoginForm({ className, ...props }) {
   const { resolvedTheme } = useTheme();
-  const [email, setEmail] = useState("demo@example.com");
-  const [password, setPassword] = useState("demo123");
+  const { mutate: login } = useLogin();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "demo@example.com",
+      password: "demo123",
+    },
+  });
+
+  function onSubmit(data) {
+    console.log(data);
+    login(data);
+  }
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex justify-center">
@@ -32,29 +48,42 @@ export function LoginForm({ className, ...props }) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
-                  required
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
+                  placeholder="demo@example.com"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address",
+                    },
+                  })}
                 />
+                {errors.email && (
+                  <p className="text-sm text-red-500">{errors.email.message}</p>
+                )}
               </Field>
               <Field>
                 <FieldLabel htmlFor="password">Password</FieldLabel>
                 <Input
                   id="password"
                   type="password"
-                  required
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
+                  {...register("password", {
+                    required: "Password must required",
+                  })}
                 />
               </Field>
+
+              {errors.password && (
+                <p className="text-sm text-red-500">
+                  {errors.password.message}
+                </p>
+              )}
               <Button type="submit">Login</Button>
             </FieldGroup>
           </form>
