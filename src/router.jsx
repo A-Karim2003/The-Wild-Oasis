@@ -13,12 +13,17 @@ import BookingDetails, {
 } from "./features/bookings/BookingDetails";
 import CheckInBooking from "./features/bookings/CheckInBooking";
 import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   { path: "login", Component: Login },
   {
     path: "/",
-    Component: RootLayout,
+    element: (
+      <ProtectedRoute>
+        <RootLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
 
     children: [

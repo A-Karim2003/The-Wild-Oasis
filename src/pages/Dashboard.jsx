@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/services/apiAuth";
 import styles from "../features/dashboard/dashboard.module.css";
 
 import KPICard from "@/features/dashboard/KPICard";
@@ -7,6 +8,9 @@ import { CalendarDays } from "lucide-react";
 import { ChartNoAxesColumnIncreasing } from "lucide-react";
 
 export default function Dashboard() {
+  const data = getCurrentUser();
+  console.log(data);
+
   return (
     <div className="h-full w-full">
       <h1>Dashboard</h1>

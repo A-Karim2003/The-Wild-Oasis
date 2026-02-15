@@ -14,10 +14,11 @@ import logoLight from "@/data/img/logo-light.png";
 import logoDark from "@/data/img/logo-dark.png";
 import { useForm } from "react-hook-form";
 import { useLogin } from "@/features/authentication/hooks/useLogin";
+import { Spinner } from "./ui/spinner";
 
 export function LoginForm({ className, ...props }) {
   const { resolvedTheme } = useTheme();
-  const { mutate: login } = useLogin();
+  const { mutate: login, isPending, error } = useLogin();
   const {
     register,
     handleSubmit,
@@ -36,11 +37,21 @@ export function LoginForm({ className, ...props }) {
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <div className="flex justify-center">
+      <div className="flex justify-center mb-4">
         {resolvedTheme === "light" && <img src={logoLight} width={140} />}
         {resolvedTheme === "dark" && <img src={logoDark} width={140} />}
       </div>
-      <Card>
+
+      {error && (
+        <div className="mb-4 flex items-center gap-2 rounded-lg border border-[oklch(0.75_0.12_85/0.35)] bg-[oklch(0.12_0.04_75/0.6)] px-3 py-2 text-sm text-[oklch(0.92_0.06_85)]">
+          <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.75_0.12_85)]" />
+          <span className="text-red-500">
+            {error.message || "Invalid email or password"}
+          </span>
+        </div>
+      )}
+
+      <Card className={"relative"}>
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
           <CardDescription>
@@ -84,7 +95,10 @@ export function LoginForm({ className, ...props }) {
                   {errors.password.message}
                 </p>
               )}
-              <Button type="submit">Login</Button>
+              <Button type="submit" disabled={isPending}>
+                {isPending && <Spinner />}
+                Login
+              </Button>
             </FieldGroup>
           </form>
         </CardContent>
