@@ -8,9 +8,6 @@ import { CalendarDays } from "lucide-react";
 import { ChartNoAxesColumnIncreasing } from "lucide-react";
 
 export default function Dashboard() {
-  const data = getCurrentUser();
-  console.log(data);
-
   return (
     <div className="h-full w-full">
       <h1>Dashboard</h1>
