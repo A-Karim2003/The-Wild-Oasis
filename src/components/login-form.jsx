@@ -23,6 +23,7 @@ export function LoginForm({ className, ...props }) {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     defaultValues: {
       email: "demo@example.com",
@@ -31,8 +32,11 @@ export function LoginForm({ className, ...props }) {
   });
 
   function onSubmit(data) {
-    console.log(data);
-    login(data);
+    login(data, {
+      onSettled: () => {
+        reset({ email: "", password: "" });
+      },
+    });
   }
 
   return (
