@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useSignUp from "../authentication/hooks/useSignUp";
+import { Spinner } from "@/components/ui/spinner";
 
 export const formSchema = z
   .object({
@@ -41,10 +42,22 @@ export default function SignupForm() {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(formSchema) });
 
-  const { mutate: signup, inPending } = useSignUp();
+  const { mutate: signup, isPending } = useSignUp();
 
   function onSubmit(data) {
     console.log(data);
+
+    signup(
+      {
+        email: data.email,
+        password: data.password,
+        fullname: data.fullname,
+      },
+
+      {
+        onSuccess: () => reset(""),
+      },
+    );
   }
 
   return (
@@ -73,7 +86,7 @@ export default function SignupForm() {
         <Field>
           <FieldLabel htmlFor="password">Password</FieldLabel>
           <Input id="password" type="password" {...register("password")} />
-          {errors.fullname && (
+          {errors.password && (
             <p className="text-sm text-red-500">{errors.password.message}</p>
           )}
         </Field>
@@ -98,10 +111,17 @@ export default function SignupForm() {
           </Button>
           <Button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isPending}
             className={"bg-gold-dark"}
           >
-            Create new user
+            {isPending && (
+              <>
+                <Spinner />
+                Creating new user
+              </>
+            )}
+
+            {!isPending && " Create new user"}
           </Button>
         </div>
       </form>
