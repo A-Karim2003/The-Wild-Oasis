@@ -5,20 +5,29 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useSignUp from "../authentication/hooks/useSignUp";
 
 export const formSchema = z
   .object({
     fullname: z
       .string()
-      .min(1, "Full name is required")
-      .min(2, "Full name must be at least 2 characters"),
-    email: z.email("Enter a valid email address").min(1, "Email is required"),
+      .trim()
+      .nonempty("Full name is required")
+      .min(2, { message: "Full name must be at least 2 characters" }),
+
+    email: z
+      .string()
+      .trim()
+      .nonempty("Email is required")
+      .email({ message: "Enter a valid email address" }),
 
     password: z
       .string()
-      .min(1, "Password is required")
-      .min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
+      .trim()
+      .nonempty("Password is required")
+      .min(8, { message: "Password must be at least 8 characters" }),
+
+    confirmPassword: z.string().trim().nonempty("Please confirm your password"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -32,11 +41,11 @@ export default function SignupForm() {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(formSchema) });
 
+  const { mutate: signup, inPending } = useSignUp();
+
   function onSubmit(data) {
     console.log(data);
   }
-
-  console.log(errors);
 
   return (
     <Card className="p-4">
