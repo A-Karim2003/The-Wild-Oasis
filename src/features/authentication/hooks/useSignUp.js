@@ -5,7 +5,8 @@ import { toast } from "react-toastify";
 export default function useSignUp() {
   return useMutation({
     mutationFn: signUp,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log(data);
       toast.success("Account successfully created");
     },
 

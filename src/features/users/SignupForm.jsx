@@ -35,18 +35,17 @@ export const formSchema = z
     path: ["confirmPassword"],
   });
 
-export default function SignupForm() {
+export default function SignupForm({ setShowEmailConfirm }) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm({ resolver: zodResolver(formSchema) });
 
   const { mutate: signup, isPending } = useSignUp();
 
   function onSubmit(data) {
-    console.log(data);
-
     signup(
       {
         email: data.email,
@@ -55,7 +54,15 @@ export default function SignupForm() {
       },
 
       {
-        onSuccess: () => reset(""),
+        onSuccess: (data) => {
+          console.log(data);
+
+          reset();
+          // Only show email confirmation if NO session returned
+          if (!data.session) {
+            setShowEmailConfirm(true);
+          }
+        },
       },
     );
   }
