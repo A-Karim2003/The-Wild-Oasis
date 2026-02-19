@@ -43,3 +43,20 @@ export async function signUp({ email, password, fullname }) {
 
   return data;
 }
+
+export async function updateCurrentUser({ fullname, password, avatar }) {
+  const updatePayload = {};
+
+  if (fullname) updatePayload.password = password;
+  if (fullname) updatePayload.data = { fullname };
+
+  const { data, error } = await supabase.auth.updateUser({
+    password,
+    avatar,
+    fullname,
+  });
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}

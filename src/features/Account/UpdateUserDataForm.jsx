@@ -47,10 +47,6 @@ export default function UpdateUserDataForm() {
     });
   }
 
-  function handleCancel() {
-    reset({ fullname });
-  }
-
   return (
     <Card className="bg-card border-border/60">
       <CardHeader className="pb-2">
@@ -73,7 +69,7 @@ export default function UpdateUserDataForm() {
               type="email"
               defaultValue={email}
               disabled
-              className="bg-muted/40 text-muted-foreground cursor-not-allowed"
+              className="bg-input/50 text-muted-foreground cursor-not-allowed"
             />
           </div>
 
@@ -89,7 +85,6 @@ export default function UpdateUserDataForm() {
                 id="fullname"
                 type="text"
                 placeholder="Your full name"
-                className="bg-input/50"
                 {...register("fullname")}
               />
               {errors.fullname && (
@@ -135,7 +130,7 @@ export default function UpdateUserDataForm() {
               variant="outline"
               size="sm"
               className="border-border text-muted-foreground hover:text-foreground"
-              onClick={handleCancel}
+              onClick={() => reset({ fullname })}
             >
               <X className="w-3.5 h-3.5" />
               Cancel
