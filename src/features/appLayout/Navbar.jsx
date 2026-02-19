@@ -5,10 +5,17 @@ import { LogOut, User2 } from "lucide-react";
 import useLogout from "../authentication/hooks/useLogout";
 import useUser from "../authentication/hooks/useUser";
 import { Spinner } from "@/components/ui/spinner";
+import { useNavigate } from "react-router";
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const { mutate: logoutMutation } = useLogout();
   const { data: user, isPending } = useUser();
+  console.log(user);
+
+  const { fullname, avatar } = user.user_metadata;
+  const parts = fullname.split(" ");
+  const initials = parts[0][0] + (parts[1]?.[0] ?? "");
 
   return (
     <header className="h-18 w-full  items-center flex justify-between px-6">
@@ -20,16 +27,19 @@ export default function Navbar() {
           {!isPending && (
             <>
               <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>AK</AvatarFallback>
+                <AvatarImage src={avatar} />
+                <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
-              <span>{user.email.split("@")[0]}</span>
+              <span>{fullname || user.email.split("@")[0]}</span>
             </>
           )}
         </div>
 
         <div className="flex items-center gap-3">
-          <User2 className="w-6 h-6 text-gold-dark cursor-pointer" />
+          <User2
+            className="w-6 h-6 text-gold-dark cursor-pointer"
+            onClick={() => navigate("account")}
+          />
           <ThemeToggle />
           <LogOut className="cursor-pointer" onClick={logoutMutation} />
         </div>

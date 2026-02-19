@@ -27,7 +27,7 @@ export function LoginForm({ className, ...props }) {
   } = useForm({
     defaultValues: {
       email: "demo@example.com",
-      password: "demo123",
+      password: "password123",
     },
   });
 

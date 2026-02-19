@@ -55,8 +55,6 @@ export default function SignupForm({ setShowEmailConfirm }) {
 
       {
         onSuccess: (data) => {
-          console.log(data);
-
           reset();
           // Only show email confirmation if NO session returned
           if (!data.session) {
