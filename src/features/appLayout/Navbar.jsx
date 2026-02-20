@@ -11,6 +11,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { mutate: logoutMutation } = useLogout();
   const { data: user, isPending } = useUser();
+  console.log(user);
 
   const { fullname, avatar } = user.user_metadata;
   const parts = fullname.split(" ");
