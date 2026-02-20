@@ -8,6 +8,8 @@ import useUser from "../authentication/hooks/useUser";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import useUpdateAccount from "./hooks/useUpdateAccount";
+import { Spinner } from "@/components/ui/spinner";
 
 const formSchema = z.object({
   fullname: z
@@ -20,6 +22,7 @@ const formSchema = z.object({
 
 export default function UpdateUserDataForm() {
   const { data: user } = useUser();
+  const { mutate: updateAccount, isPending } = useUpdateAccount();
 
   const {
     email,
@@ -41,7 +44,7 @@ export default function UpdateUserDataForm() {
   const selectedFileName = avatarFile?.[0]?.name;
 
   function onSubmit(data) {
-    console.log({
+    updateAccount({
       fullname: data.fullname,
       avatar: data.avatar?.[0] ?? null,
     });
@@ -136,6 +139,7 @@ export default function UpdateUserDataForm() {
               Cancel
             </Button>
             <Button type="submit" size="sm" disabled={isSubmitting}>
+              {isPending && <Spinner />}
               Update account
             </Button>
           </div>

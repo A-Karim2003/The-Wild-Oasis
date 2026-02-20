@@ -64,15 +64,29 @@ export async function updateCurrentUser({ fullname, password, avatar }) {
   const { error: storageError } = await supabase.storage
     .from("avatars")
     .upload(fileName, avatar, {
-      //replace file if it exists
+      // replaces file if it exists
       upsert: true,
     });
 
-  if (storageError) throw new Error(error.message);
+  if (storageError) {
+    console.log(storageError);
+    throw new Error(storageError.message);
+  }
 
-  // get the public URL and attach it to user metadata
-
+  //? get the public URL and attach it to user metadata
   const {
     data: { publicUrl },
   } = supabase.storage.from("avatars").getPublicUrl(fileName);
+
+  const { data: updatedUser, error: urlError } = await supabase.auth.updateUser(
+    {
+      data: {
+        avatar: publicUrl,
+      },
+    },
+  );
+
+  if (urlError) throw new Error(urlError.message);
+
+  return updatedUser;
 }
