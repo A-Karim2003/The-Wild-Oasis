@@ -7,6 +7,8 @@ import { KeyRound, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import useUpdateAccount from "./hooks/useUpdateAccount";
+import { Spinner } from "@/components/ui/spinner";
 
 const formSchema = z
   .object({
@@ -30,9 +32,11 @@ export default function UpdatePasswordForm() {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(formSchema) });
 
+  const { mutate: updateAccount, isPending } = useUpdateAccount();
+
   function onSubmit(data) {
-    console.log({ newPassword: data.newPassword });
-    // call your mutation here
+    updateAccount({ password: data.newPassword });
+    reset();
   }
 
   return (
@@ -107,6 +111,7 @@ export default function UpdatePasswordForm() {
               Cancel
             </Button>
             <Button type="submit" size="sm" disabled={isSubmitting}>
+              {isPending && <Spinner />}
               Update password
             </Button>
           </div>

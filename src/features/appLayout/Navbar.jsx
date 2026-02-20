@@ -14,7 +14,7 @@ export default function Navbar() {
 
   const { fullname, avatar } = user.user_metadata;
   const parts = fullname.split(" ");
-  const initials = parts[0][0] + (parts[1]?.[0] ?? "");
+  const initials = (parts[0][0] + (parts[1]?.[0] ?? "")).toUpperCase();
 
   return (
     <header className="h-18 w-full  items-center flex justify-between px-6">

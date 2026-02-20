@@ -6,13 +6,14 @@ export default function useUpdateAccount() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updateCurrentUser,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
+      toast.success("Account successfully updated");
     },
 
     onError: (error) => {
-      console.log(error);
+      console.error(error);
+      toast.success(error.message);
     },
   });
 }
