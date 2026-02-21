@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { getToday } from "@/utils/helpers";
 
 export async function getBookings() {
   let { data, error } = await supabase
@@ -64,6 +65,31 @@ export async function deleteBooking(id) {
     console.log(error);
     throw new Error(error.message);
   }
+
+  return data;
+}
+
+export async function getBookingsAfterDate(date) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*")
+    .gte("created_at", date)
+    .lte("created_at", getToday({ end: true }));
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
+export async function getStaysAfterDate(date) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*, guests(name)")
+    .gte("start_date", date)
+    .lte("end_date", getToday({ end: true }))
+    .neq("status", "unconfirmed");
+
+  if (error) throw new Error("Stays could not be loaded");
 
   return data;
 }
