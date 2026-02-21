@@ -10,6 +10,6 @@ export default function useRecentStays() {
 
   return useQuery({
     queryFn: () => getStaysAfterDate(queryDate),
-    queryKey: ["bookings", numOfDaysFilter],
+    queryKey: ["stays", numOfDaysFilter],
   });
 }
