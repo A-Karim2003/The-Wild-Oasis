@@ -7,6 +7,7 @@ import useRecentStays from "@/features/dashboard/hooks/useRecentStays";
 import { SalesChart } from "@/features/dashboard/SalesChart/SalesChart";
 import { StaysSummaryChart } from "@/features/dashboard/StaysSummaryChart/StaysSummaryChart";
 import { TableDemo } from "@/features/dashboard/summaryTable/summaryTable";
+import { Spinner } from "@/components/ui/spinner";
 
 export const dashboardFilterOptions = [
   { value: "7", label: "Last 7 Days" },
@@ -46,7 +47,11 @@ export default function Dashboard() {
           <StaysSummaryChart />
         </div>
         <div className={styles.gridItem7}>
-          <SalesChart />
+          {isPending ? (
+            <Spinner className="size-18 text-amber-600 m-auto mt-[20%]" />
+          ) : (
+            <SalesChart bookings={bookings} />
+          )}
         </div>
       </div>
     </div>

@@ -1,15 +1,6 @@
-"use client";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import { TrendingUp } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartLegend,
@@ -17,31 +8,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { eachDayOfInterval, format, isSameDay, subDays } from "date-fns";
+import { useSearchParams } from "react-router";
 
 export const description = "An area chart with a legend";
-
-const chartData = [
-  { label: "Jan 09", total_sales: 4200, extra_sales: 450 },
-  { label: "Jan 11", total_sales: 7700, extra_sales: 0 },
-  { label: "Jan 14", total_sales: 2500, extra_sales: 300 },
-  { label: "Jan 17", total_sales: 5400, extra_sales: 720 },
-  { label: "Jan 20", total_sales: 1750, extra_sales: 105 },
-  { label: "Jan 22", total_sales: 3000, extra_sales: 0 },
-  { label: "Jan 25", total_sales: 4875, extra_sales: 450 },
-  { label: "Jan 27", total_sales: 1800, extra_sales: 300 },
-  { label: "Jan 29", total_sales: 2800, extra_sales: 180 },
-  { label: "Feb 01", total_sales: 5200, extra_sales: 0 },
-  { label: "Feb 03", total_sales: 2370, extra_sales: 120 },
-  { label: "Feb 05", total_sales: 4900, extra_sales: 420 },
-  { label: "Feb 07", total_sales: 1500, extra_sales: 300 },
-  { label: "Feb 10", total_sales: 6050, extra_sales: 675 },
-  { label: "Feb 12", total_sales: 3450, extra_sales: 525 },
-  { label: "Feb 14", total_sales: 900, extra_sales: 180 },
-  { label: "Feb 16", total_sales: 7750, extra_sales: 750 },
-  { label: "Feb 18", total_sales: 2250, extra_sales: 300 },
-  { label: "Feb 20", total_sales: 4200, extra_sales: 0 },
-  { label: "Feb 21", total_sales: 5975, extra_sales: 975 },
-];
 
 const chartConfig = {
   total_sales: {
@@ -54,11 +24,37 @@ const chartConfig = {
   },
 };
 
-export function SalesChart() {
+export function SalesChart({ bookings }) {
+  const [searchParam] = useSearchParams();
+  const lastNumOfDays = parseInt(searchParam.get("last")) || 7;
+
+  //* Generates an array of every single date between two dates.
+  const allDates = eachDayOfInterval({
+    start: subDays(new Date(), lastNumOfDays - 1),
+    end: new Date(),
+  });
+
+  const chartData = allDates.map((date) => ({
+    label: format(date, "MMM dd"),
+
+    //* Sum all booking sales for that given date
+    total_sales: bookings
+      .filter((booking) => isSameDay(date, new Date(booking.start_date)))
+      .reduce((acc, cur) => acc + cur.cabin_price + cur.extras_price, 0),
+
+    extra_sales: bookings
+      .filter((booking) => isSameDay(date, new Date(booking.start_date)))
+      .reduce((acc, cur) => acc + cur.extras_price, 0),
+  }));
+
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>Sales from May 25 2023 — May 31 2023</CardTitle>
+        <CardTitle>
+          Sales from{" "}
+          {format(subDays(new Date(), lastNumOfDays - 1), "MMM dd yyyy")} —{" "}
+          {format(new Date(), "MMM dd yyyy")}
+        </CardTitle>
       </CardHeader>
       <CardContent className="h-full">
         <ChartContainer config={chartConfig} className="h-full w-full">
@@ -66,17 +62,15 @@ export function SalesChart() {
             accessibilityLayer
             data={chartData}
             margin={{
-              left: 12,
-              right: 12,
+              left: 0,
+              right: 0,
             }}
           >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="label"
-              tickLine={true}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
+            <CartesianGrid vertical={true} />
+            <XAxis dataKey="label" tickLine={true} tickMargin={8} />
+
+            <YAxis dataKey="total_sales" tickLine={true} tickMargin={8} />
+
             <ChartTooltip cursor={true} content={<ChartTooltipContent />} />
 
             <Area
