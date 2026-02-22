@@ -21,22 +21,36 @@ import {
 export const description = "An area chart with a legend";
 
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
+  { label: "Jan 09", total_sales: 4200, extra_sales: 450 },
+  { label: "Jan 11", total_sales: 7700, extra_sales: 0 },
+  { label: "Jan 14", total_sales: 2500, extra_sales: 300 },
+  { label: "Jan 17", total_sales: 5400, extra_sales: 720 },
+  { label: "Jan 20", total_sales: 1750, extra_sales: 105 },
+  { label: "Jan 22", total_sales: 3000, extra_sales: 0 },
+  { label: "Jan 25", total_sales: 4875, extra_sales: 450 },
+  { label: "Jan 27", total_sales: 1800, extra_sales: 300 },
+  { label: "Jan 29", total_sales: 2800, extra_sales: 180 },
+  { label: "Feb 01", total_sales: 5200, extra_sales: 0 },
+  { label: "Feb 03", total_sales: 2370, extra_sales: 120 },
+  { label: "Feb 05", total_sales: 4900, extra_sales: 420 },
+  { label: "Feb 07", total_sales: 1500, extra_sales: 300 },
+  { label: "Feb 10", total_sales: 6050, extra_sales: 675 },
+  { label: "Feb 12", total_sales: 3450, extra_sales: 525 },
+  { label: "Feb 14", total_sales: 900, extra_sales: 180 },
+  { label: "Feb 16", total_sales: 7750, extra_sales: 750 },
+  { label: "Feb 18", total_sales: 2250, extra_sales: 300 },
+  { label: "Feb 20", total_sales: 4200, extra_sales: 0 },
+  { label: "Feb 21", total_sales: 5975, extra_sales: 975 },
 ];
 
 const chartConfig = {
-  desktop: {
+  total_sales: {
     label: "Total Sales",
-    color: "var(--gold-bright)",
-  },
-  mobile: {
-    label: "Extras Sales",
     color: "var(--gold-dark)",
+  },
+  extra_sales: {
+    label: "Extra Sales",
+    color: "var(--gold-bright)",
   },
 };
 
@@ -58,31 +72,26 @@ export function SalesChart() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
+              dataKey="label"
+              tickLine={true}
               tickMargin={8}
               tickFormatter={(value) => value.slice(0, 3)}
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
+            <ChartTooltip cursor={true} content={<ChartTooltipContent />} />
+
+            <Area
+              dataKey="total_sales"
+              type="natural"
+              fill="var(--color-total_sales)"
+              fillOpacity={0.4}
+              stroke="var(--color-total_sales)"
             />
             <Area
-              dataKey="mobile"
+              dataKey="extra_sales"
               type="natural"
-              fill="var(--color-mobile)"
+              fill="var(--color-extra_sales)"
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
-              stackId="a"
-            />
-            <Area
-              dataKey="desktop"
-              type="natural"
-              fill="var(--color-desktop)"
-              fillOpacity={0.4}
-              stroke="var(--color-desktop)"
-              stackId="a"
+              stroke="var(--color-extra_sales)"
             />
             <ChartLegend content={<ChartLegendContent />} />
           </AreaChart>

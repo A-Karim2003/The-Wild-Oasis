@@ -6,6 +6,7 @@ import Filter from "@/components/Filter";
 import useRecentStays from "@/features/dashboard/hooks/useRecentStays";
 import { SalesChart } from "@/features/dashboard/SalesChart/SalesChart";
 import { StaysSummaryChart } from "@/features/dashboard/StaysSummaryChart/StaysSummaryChart";
+import { TableDemo } from "@/features/dashboard/summaryTable/summaryTable";
 
 export const dashboardFilterOptions = [
   { value: "7", label: "Last 7 Days" },
@@ -38,7 +39,9 @@ export default function Dashboard() {
           confirmedStays={confirmedStays}
           isStaysPending={isStaysPending}
         />
-        <div className={styles.gridItem5}>5</div>
+        <div className={styles.gridItem5}>
+          <TableDemo />
+        </div>
         <div className={styles.gridItem6}>
           <StaysSummaryChart />
         </div>
