@@ -11,12 +11,11 @@
     "gridItem6 gridItem6"
     "gridItem7 gridItem7";
   padding: 0.5rem;
-  border: solid pink 10px;
   min-height: 0;
 }
 
 .grid > div {
-  border: solid red 2px;
+  min-height: 0;
 }
 
 .gridItem1 {

@@ -5,6 +5,7 @@ import TableOperations from "@/features/cabins/TableOperations";
 import Filter from "@/components/Filter";
 import useRecentStays from "@/features/dashboard/hooks/useRecentStays";
 import { SalesChart } from "@/features/dashboard/SalesChart/SalesChart";
+import { StaysSummaryChart } from "@/features/dashboard/StaysSummaryChart/StaysSummaryChart";
 
 export const dashboardFilterOptions = [
   { value: "7", label: "Last 7 Days" },
@@ -18,7 +19,7 @@ export default function Dashboard() {
   const { data: confirmedStays, isStaysPending } = useRecentStays();
 
   return (
-    <div className="flex h-full w-full flex-col border-10 border-green-500">
+    <div className="flex h-full w-full flex-col pb-5">
       <div className="mb-6 flex items-center justify-between gap-4">
         <h2 className="text-4xl font-bold max-[448px]:hidden">Dashboard</h2>
         <TableOperations>
@@ -38,7 +39,9 @@ export default function Dashboard() {
           isStaysPending={isStaysPending}
         />
         <div className={styles.gridItem5}>5</div>
-        <div className={styles.gridItem6}>6</div>
+        <div className={styles.gridItem6}>
+          <StaysSummaryChart />
+        </div>
         <div className={styles.gridItem7}>
           <SalesChart />
         </div>

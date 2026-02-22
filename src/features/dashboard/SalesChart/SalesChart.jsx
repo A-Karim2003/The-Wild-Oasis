@@ -42,15 +42,12 @@ const chartConfig = {
 
 export function SalesChart() {
   return (
-    <Card className="border-10 border-purple-700 h-full">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>Sales from May 25 2023 — May 31 2023</CardTitle>
       </CardHeader>
-      <CardContent className="border-5 border-blue-500 h-full">
-        <ChartContainer
-          config={chartConfig}
-          className="border-5 border-green-500 h-full w-full"
-        >
+      <CardContent className="h-full">
+        <ChartContainer config={chartConfig} className="h-full w-full">
           <AreaChart
             accessibilityLayer
             data={chartData}
