@@ -1,5 +1,5 @@
 import styles from "../../dashboard/dashboard.module.css";
-import KPICard from "../KPICard";
+import KPICard from "./KPICard";
 import { BriefcaseBusiness } from "lucide-react";
 import { Banknote } from "lucide-react";
 import { CalendarDays } from "lucide-react";
@@ -38,8 +38,6 @@ export default function KPICards({
     (occupations / (lastNumOfDays * cabins.length)) *
     100
   ).toFixed(2);
-
-  console.log(occupationRate);
 
   return (
     <>

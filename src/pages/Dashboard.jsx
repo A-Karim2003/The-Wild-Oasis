@@ -4,6 +4,7 @@ import KPICards from "@/features/dashboard/KPICards/KPICards";
 import TableOperations from "@/features/cabins/TableOperations";
 import Filter from "@/components/Filter";
 import useRecentStays from "@/features/dashboard/hooks/useRecentStays";
+import { SalesChart } from "@/features/dashboard/SalesChart/SalesChart";
 
 export const dashboardFilterOptions = [
   { value: "7", label: "Last 7 Days" },
@@ -16,10 +17,8 @@ export default function Dashboard() {
 
   const { data: confirmedStays, isStaysPending } = useRecentStays();
 
-  console.log(confirmedStays);
-
   return (
-    <div className="h-full w-full">
+    <div className="flex h-full w-full flex-col border-10 border-green-500">
       <div className="mb-6 flex items-center justify-between gap-4">
         <h2 className="text-4xl font-bold max-[448px]:hidden">Dashboard</h2>
         <TableOperations>
@@ -40,7 +39,9 @@ export default function Dashboard() {
         />
         <div className={styles.gridItem5}>5</div>
         <div className={styles.gridItem6}>6</div>
-        <div className={styles.gridItem7}>7</div>
+        <div className={styles.gridItem7}>
+          <SalesChart />
+        </div>
       </div>
     </div>
   );

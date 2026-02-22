@@ -1,6 +1,5 @@
 .grid {
   display: grid;
-  height: 100%;
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: auto auto 1fr 1fr 1fr;
   gap: 1rem;
@@ -12,6 +11,34 @@
     "gridItem6 gridItem6"
     "gridItem7 gridItem7";
   padding: 0.5rem;
+  border: solid pink 10px;
+  min-height: 0;
+}
+
+.grid > div {
+  border: solid red 2px;
+}
+
+.gridItem1 {
+  grid-area: gridItem1;
+}
+.gridItem2 {
+  grid-area: gridItem2;
+}
+.gridItem3 {
+  grid-area: gridItem3;
+}
+.gridItem4 {
+  grid-area: gridItem4;
+}
+.gridItem5 {
+  grid-area: gridItem5;
+}
+.gridItem6 {
+  grid-area: gridItem6;
+}
+.gridItem7 {
+  grid-area: gridItem7;
 }
 
 @media (min-width: 980px) {

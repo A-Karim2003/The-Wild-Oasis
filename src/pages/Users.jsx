@@ -1,3 +1,4 @@
+import { SalesChart } from "@/features/dashboard/SalesChart/SalesChart";
 import EmailConfirmation from "@/features/users/EmailConfirmation";
 import SignupForm from "@/features/users/SignupForm";
 import { useState } from "react";
