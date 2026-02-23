@@ -11,8 +11,6 @@ import {
 import { eachDayOfInterval, format, isSameDay, subDays } from "date-fns";
 import { useSearchParams } from "react-router";
 
-export const description = "An area chart with a legend";
-
 const chartConfig = {
   total_sales: {
     label: "Total Sales",

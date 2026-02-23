@@ -18,39 +18,52 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-export const description = "A donut chart with text";
-
 const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
+  { duration: "1 night", value: 0, color: "var(--gold-bright)" },
+  { duration: "2 nights", value: 0, color: "var(--gold)" },
+  { duration: "3 nights", value: 0, color: "var(--gold-light)" },
+  { duration: "4-5 nights", value: 0, color: "var(--gold-dark)" },
+  { duration: "6-7 nights", value: 0, color: "var(--gold-accent)" },
+  { duration: "8-14 nights", value: 0, color: "var(--gold-bright)" },
+  { duration: "15-21 nights", value: 0, color: "var(--gold-dark)" },
+  { duration: "21+ nights", value: 0, color: "var(--gold-accent)" },
 ];
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  value: {
+    label: "Nights",
   },
-  chrome: {
-    label: "Chrome",
+  "1 night": {
+    label: "1 night",
     color: "var(--gold-bright)",
   },
-  safari: {
-    label: "Safari",
+  "2 nights": {
+    label: "2 nights",
     color: "var(--gold)",
   },
-  firefox: {
-    label: "Firefox",
+  "3 nights": {
+    label: "3 nights",
+    color: "var(--gold-light)",
+  },
+  "4-5 nights": {
+    label: "4-5 nights",
     color: "var(--gold-dark)",
   },
-  edge: {
-    label: "Edge",
+  "6-7 nights": {
+    label: "6-7 nights",
     color: "var(--gold-accent)",
   },
-  other: {
-    label: "Other",
-    color: "var(--gold-light)",
+  "8-14 nights": {
+    label: "8-14 nights",
+    color: "var(--gold-bright)",
+  },
+  "15-21 nights": {
+    label: "15-21 nights",
+    color: "var(--gold-dark)",
+  },
+  "21+ nights": {
+    label: "21+ nights",
+    color: "var(--gold-accent)",
   },
 };
 
