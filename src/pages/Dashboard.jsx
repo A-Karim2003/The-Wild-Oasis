@@ -18,10 +18,10 @@ export const dashboardFilterOptions = [
 export default function Dashboard() {
   const { data: bookings, isPending } = useRecentBookings();
 
-  const { data: confirmedStays, isStaysPending } = useRecentStays();
+  const { data: confirmedStays, isPending: isStaysPending } = useRecentStays();
 
   return (
-    <div className="flex h-full w-full flex-col pb-5">
+    <div className="flex w-full flex-col pb-5 overflow-y-auto">
       <div className="mb-6 flex items-center justify-between gap-4">
         <h2 className="text-4xl font-bold max-[448px]:hidden">Dashboard</h2>
         <TableOperations>
