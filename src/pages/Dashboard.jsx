@@ -44,7 +44,11 @@ export default function Dashboard() {
           <TableDemo />
         </div>
         <div className={styles.gridItem6}>
-          <StaysSummaryChart />
+          {isStaysPending ? (
+            <Spinner className="size-18 text-amber-600 m-auto mt-[20%]" />
+          ) : (
+            <StaysSummaryChart confirmedStays={confirmedStays} />
+          )}
         </div>
         <div className={styles.gridItem7}>
           {isPending ? (
