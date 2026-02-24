@@ -6,7 +6,7 @@ import Filter from "@/components/Filter";
 import useRecentStays from "@/features/dashboard/hooks/useRecentStays";
 import { SalesChart } from "@/features/dashboard/SalesChart/SalesChart";
 import { StaysSummaryChart } from "@/features/dashboard/StaysSummaryChart/StaysSummaryChart";
-import { TableDemo } from "@/features/dashboard/summaryTable/summaryTable";
+import SummaryTable from "@/features/dashboard/summaryTable/summaryTable";
 import { Spinner } from "@/components/ui/spinner";
 
 export const dashboardFilterOptions = [
@@ -21,7 +21,7 @@ export default function Dashboard() {
   const { data: confirmedStays, isPending: isStaysPending } = useRecentStays();
 
   return (
-    <div className="flex w-full flex-col pb-5 overflow-y-auto">
+    <div className="flex h-full w-full flex-col pb-5">
       <div className="mb-6 flex items-center justify-between gap-4">
         <h2 className="text-4xl font-bold max-[448px]:hidden">Dashboard</h2>
         <TableOperations>
@@ -41,7 +41,7 @@ export default function Dashboard() {
           isStaysPending={isStaysPending}
         />
         <div className={styles.gridItem5}>
-          <TableDemo />
+          <SummaryTable />
         </div>
         <div className={styles.gridItem6}>
           {isStaysPending ? (

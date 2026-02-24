@@ -95,9 +95,7 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarGroupContent>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <Uploader />
-            </SidebarMenuItem>
+            <SidebarMenuItem>{open && <Uploader />}</SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarFooter>
