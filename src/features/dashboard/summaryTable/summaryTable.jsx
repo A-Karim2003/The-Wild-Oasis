@@ -4,88 +4,67 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+import useTodaysActivities from "../hooks/useTodaysActivities";
+import { differenceInDays } from "date-fns";
 
 export function TableDemo() {
+  const { activities = [] } = useTodaysActivities();
+  console.log(activities);
+
   return (
     <Card className={"h-full"}>
+      {!activities.length && (
+        <p className="text-center text-lg text-muted-foreground">
+          No activities today
+        </p>
+      )}
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-25">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-          </TableRow>
-        </TableHeader>
+        <TableCaption>Todays activities</TableCaption>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell className="text-right">
-                {invoice.totalAmount}
+          {activities.map((booking) => (
+            <TableRow key={booking.id}>
+              <TableCell>
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                    booking.status === "unconfirmed"
+                      ? "bg-gold/20 text-gold-dark"
+                      : "bg-gold-dark/20 text-gold-bright"
+                  }`}
+                >
+                  {booking.status === "unconfirmed" ? "ARRIVING" : "DEPARTING"}
+                </span>
+              </TableCell>
+
+              <TableCell>
+                <img
+                  src={booking.guests.country_flag}
+                  alt={booking.guests.nationality}
+                  className="h-5 w-7 object-cover"
+                />
+              </TableCell>
+
+              <TableCell className="font-medium">
+                {booking.guests.name}
+              </TableCell>
+
+              <TableCell>
+                {differenceInDays(
+                  new Date(booking.end_date),
+                  new Date(booking.start_date),
+                )}{" "}
+                nights
+              </TableCell>
+
+              <TableCell>
+                <button className="rounded bg-gold text-black w-22 py-2 text-xs font-bold hover:bg-gold-bright transition-colors">
+                  {booking.status === "unconfirmed" ? "CHECK IN" : "CHECK OUT"}
+                </button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
-          </TableRow>
-        </TableFooter>
       </Table>
     </Card>
   );

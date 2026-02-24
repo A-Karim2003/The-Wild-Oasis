@@ -40,8 +40,6 @@ function prepareData(chartInitialData, stays) {
 
   return stays
     .reduce((initialData, cur) => {
-      console.log(initialData);
-
       const num = cur.numNights;
       if (num === 1) return incArrayValue(initialData, "1 night");
       if (num === 2) return incArrayValue(initialData, "2 nights");

@@ -93,3 +93,20 @@ export async function getStaysAfterDate(date) {
 
   return data;
 }
+
+export async function getStaysTodaysActivity() {
+  const today = new Date().toISOString().split("T")[0];
+
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*, guests(name, nationality, country_flag)")
+    .or(
+      `and(start_date.eq.${today},status.eq.unconfirmed),and(end_date.eq.${today},status.eq.checked-in)`,
+    )
+    .order("created_at");
+
+  if (error) throw new Error(error.message);
+  console.log(data);
+
+  return data;
+}
