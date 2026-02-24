@@ -6,62 +6,51 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useRouteError } from "react-router";
 
 export default function ErrorPage() {
+  const error = useRouteError();
   return (
-    <div className="flex h-full w-full items-center justify-center p-4">
-      <Card className="flex flex-col items-center text-center max-w-md w-full">
-        <CardHeader className="items-center gap-4">
+    <main className="relative flex h-screen w-screen items-center justify-center overflow-hidden px-4">
+      {/* Gold glow background */}
+      <div className="pointer-events-none absolute inset-0 bg-gold-glow opacity-70 dark:opacity-100" />
+
+      <Card className="relative z-10 w-full max-w-2xl rounded-3xl border-border/40 bg-card/90 backdrop-blur-xl shadow-[0_0_60px_-15px_var(--color-gold)]">
+        <CardHeader className="flex flex-col items-center gap-6 text-center">
           {/* Decorative ring */}
-          <div
-            className="h-32 w-32 rounded-full flex items-center justify-center"
-            style={{
-              border: "2px solid var(--gold-dark)",
-              boxShadow:
-                "0 0 40px oklch(0.65 0.14 75 / 0.3), inset 0 0 40px oklch(0.65 0.14 75 / 0.1)",
-            }}
-          >
-            <span
-              className="text-5xl font-bold"
-              style={{ color: "var(--gold-bright)" }}
-            >
-              !
-            </span>
+          <div className="flex h-32 w-32 items-center justify-center rounded-full border-2 border-gold-dark shadow-[0_0_40px_oklch(0.65_0.14_75/.3),inset_0_0_40px_oklch(0.65_0.14_75/.1)]">
+            <span className="text-5xl font-bold text-gold-bright">!</span>
           </div>
 
-          <CardTitle className="text-3xl" style={{ color: "var(--gold)" }}>
+          <CardTitle className="text-3xl font-semibold text-gold">
             Something went wrong
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
-          <p
-            className="text-sm leading-relaxed"
-            style={{ color: "var(--gold-accent)" }}
-          >
+        <CardContent className="text-center">
+          <p className="text-sm leading-relaxed text-gold-accent">
             An unexpected error occurred. Please try refreshing the page or
             navigating back.
           </p>
         </CardContent>
 
-        <CardFooter className="flex gap-4">
+        <CardFooter className="flex justify-center gap-4">
           <Button
             onClick={() => window.location.reload()}
-            style={{ background: "var(--gold)", color: "oklch(0 0 0)" }}
-            className="hover:opacity-90"
+            className="rounded-xl bg-gold text-black hover:bg-gold-bright"
           >
-            Refresh Page
+            Refresh page
           </Button>
+
           <Button
             variant="outline"
             onClick={() => window.history.back()}
-            style={{ borderColor: "var(--gold-dark)", color: "var(--gold)" }}
-            className="hover:opacity-90 bg-transparent"
+            className="rounded-xl border-gold-dark text-gold hover:bg-gold/10"
           >
-            Go Back
+            Go back
           </Button>
         </CardFooter>
       </Card>
-    </div>
+    </main>
   );
 }
