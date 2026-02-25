@@ -15,7 +15,6 @@ import useCheckout from "@/features/bookings/hooks/useCheckout";
 export default function SummaryTable() {
   const { data: activities = [] } = useTodaysActivities();
   const { mutate: checkout } = useCheckout();
-  console.log(activities);
 
   return (
     <Card className={"h-full"}>

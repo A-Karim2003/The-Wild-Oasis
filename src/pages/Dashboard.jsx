@@ -16,8 +16,9 @@ export const dashboardFilterOptions = [
 ];
 
 export default function Dashboard() {
-  const { data: bookings, isPending } = useRecentBookings();
+  const { data: bookings = [], isPending } = useRecentBookings();
   const { data: confirmedStays, isPending: isStaysPending } = useRecentStays();
+  console.log(bookings);
 
   return (
     <div className="flex h-full w-full flex-col pb-5">

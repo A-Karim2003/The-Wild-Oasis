@@ -6,7 +6,6 @@ export default function useSignUp() {
   return useMutation({
     mutationFn: signUp,
     onSuccess: (data) => {
-      console.log(data);
       toast.success("Account successfully created");
     },
 

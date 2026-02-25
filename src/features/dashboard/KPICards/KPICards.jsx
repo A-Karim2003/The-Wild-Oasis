@@ -10,7 +10,7 @@ import { useSearchParams } from "react-router";
 import { useCabins } from "@/features/cabins/hooks/useCabins";
 
 export default function KPICards({
-  bookings = [],
+  bookings,
   isPending,
   confirmedStays = [],
   isStaysPending,
@@ -19,7 +19,10 @@ export default function KPICards({
   const { data: cabins = [] } = useCabins();
 
   //* Total sales
-  const sales = bookings.reduce((acc, booking) => acc + booking.cabin_price, 0);
+  const sales = bookings?.reduce(
+    (acc, booking) => acc + booking.cabin_price,
+    0,
+  );
 
   //* Total check-ins
   const totalCheckins = confirmedStays.reduce(

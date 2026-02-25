@@ -46,7 +46,6 @@ export async function updateBooking(id, updatedFields) {
     .single();
 
   if (error) {
-    console.log(error);
     throw new Error(error.message);
   }
 
@@ -62,7 +61,6 @@ export async function deleteBooking(id) {
     .single();
 
   if (error) {
-    console.log(error);
     throw new Error(error.message);
   }
 
@@ -106,7 +104,6 @@ export async function getStaysTodaysActivity() {
     .order("created_at");
 
   if (error) throw new Error(error.message);
-  console.log(data);
 
   return data;
 }

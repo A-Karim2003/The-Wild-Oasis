@@ -10,11 +10,13 @@ import { useNavigate } from "react-router";
 export default function Navbar() {
   const navigate = useNavigate();
   const { mutate: logoutMutation } = useLogout();
-  const { data: user, isPending } = useUser();
+  const { data: user = {}, isPending } = useUser();
 
-  const { fullname, avatar } = user.user_metadata;
+  const { fullname = "", avatar } = user?.user_metadata ?? {};
   const parts = fullname.split(" ");
-  const initials = (parts[0][0] + (parts[1]?.[0] ?? "")).toUpperCase();
+  const initials = fullname
+    ? (parts[0][0] + (parts[1]?.[0] ?? "")).toUpperCase()
+    : "?";
 
   return (
     <header className="h-18 w-full  items-center flex justify-between px-6">
