@@ -10,7 +10,7 @@ export function useLogin() {
   return useMutation({
     mutationFn: login,
     onSuccess: (data) => {
-      queryClient.setQueriesData(["user"], data.user);
+      queryClient.setQueryData(["user"], data.user);
       navigate("/dashboard", { replace: true });
     },
     onError: (error) => {
