@@ -1,70 +1,62 @@
-# Hotel Management System
+# The Wild Oasis 🏨
 
-A comprehensive hotel management application built for internal staff use, enabling efficient management of cabins, bookings, guests, and daily operations with real-time dashboard analytics.
+An internal hotel management dashboard built for staff to handle day-to-day operations — bookings, cabins, check-ins, and analytics — in one place.
+
+**Live demo → [hms-oasis.netlify.app](https://hms-oasis.netlify.app/)**
+
+![Dashboard Preview](./screenshots/dashboard.png)
 
 ## Features
 
-### Authentication & User Management
+**Bookings** — View, filter, sort, and paginate all bookings. Manage the full guest lifecycle: check-in with payment confirmation and optional breakfast upsell, and check-out.
 
-- Secure user login system for employees
-- Internal user registration (existing users can create new accounts)
-- Profile management with avatar upload
-- Password and name update capabilities
+**Cabins** — Manage cabin listings with image uploads, pricing, capacity, and discount configuration.
 
-### Cabin Management
+**Dashboard** — At-a-glance KPIs (sales, occupancy, check-ins) with a today's activity feed, sales chart, and stay duration breakdown, filterable by the last 7, 30, or 90 days.
 
-- Visual table view of all cabins with photos
-- Track cabin details: name, capacity, price, and discounts
-- Full CRUD operations (Create, Read, Update, Delete)
-- Photo upload support for cabin listings
+**Settings** — Configure breakfast pricing, min/max nights, and max guests per booking.
 
-### Booking System
+**Auth & Accounts** — Supabase-backed authentication. Staff can update their name, avatar, and password. Existing users can register new accounts.
 
-- Comprehensive booking list with guest and cabin information
-- Track arrival/departure dates, booking status, and payment amounts
-- Filter bookings by status (Unconfirmed, Checked In, Checked Out)
-- Detailed booking information including guest count, nights, observations, and breakfast options
-- Check-in and check-out functionality
-- Payment confirmation during check-in
-- Breakfast upsell option during check-in process
-- Booking deletion capability
-
-### Guest Profiles
-
-- Store complete guest information
-- Track: full name, email, national ID, nationality
-- Display country flags for visual identification
-
-### Dashboard & Analytics
-
-- Customizable date range views (7, 30, or 90 days)
-- Real-time activity feed showing today's check-ins/check-outs
-- Quick-action buttons for immediate tasks
-- Key statistics: recent bookings, total sales, check-ins, occupancy rate
-- Visual sales chart comparing total sales vs extras (breakfast)
-- Stay duration statistics with visual charts
-
-### Application Settings
-
-- Configurable breakfast pricing
-- Set minimum and maximum night stays
-- Define maximum guests per booking
-
-### User Experience
-
-- Dark mode support
-- Responsive design
-- Intuitive navigation
+**UX** — Dark/light/system theme toggle, URL-driven filters and pagination, and toast notifications throughout.
 
 ## Tech Stack
 
-- **Frontend Framework:** React
-- **Routing:** React Router
-- **Styling:** Tailwind CSS
-- **State Management:** Redux
-- **Server State:** React Query (TanStack Query)
-- **Forms:** React Hook Form
-- **Icons:** React Icons
-- **Charts:** Recharts
-- **Date Handling:** date-fns
-- **Backend/Database:** Supabase
+|              |                                    |
+| ------------ | ---------------------------------- |
+| Framework    | React 19 + Vite                    |
+| Routing      | React Router v7                    |
+| Styling      | Tailwind CSS v4                    |
+| Components   | Radix UI / shadcn-ui               |
+| Server State | TanStack Query v5                  |
+| Tables       | TanStack Table v8                  |
+| Forms        | React Hook Form + Zod              |
+| Charts       | Recharts                           |
+| Backend      | Supabase (Auth, Database, Storage) |
+
+## Getting Started
+
+```bash
+git clone https://github.com/your-username/the-wild-oasis.git
+cd the-wild-oasis
+npm install
+```
+
+Create a `.env` file at the root:
+
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+```bash
+npm run dev
+```
+
+## Screenshots
+
+|                                                     |                                               |
+| --------------------------------------------------- | --------------------------------------------- |
+| ![Bookings](./screenshots/bookings.png)             | ![Cabin Management](./screenshots/cabins.png) |
+| ![Booking Detail](./screenshots/booking-detail.png) | ![Check-In](./screenshots/checkin.png)        |
+| ![Settings](./screenshots/settings.png)             | ![Login](./screenshots/login.png)             |
