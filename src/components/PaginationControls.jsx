@@ -22,7 +22,7 @@ export default function PaginationControls({ table }) {
   }
 
   return (
-    <div className="flex items-center justify-between px-4 py-2 border-t bg-gold-light">
+    <div className="flex items-center justify-between px-4 py-2 border-t bg-gold-dark">
       <div className="text-sm">
         Showing <span className="font-medium">{startRow}</span> to{" "}
         <span className="font-medium">{endRow}</span> of{" "}

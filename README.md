@@ -4,7 +4,7 @@ An internal hotel management dashboard built for staff to handle day-to-day oper
 
 **Live demo → [hms-oasis.netlify.app](https://hms-oasis.netlify.app/)**
 
-![Dashboard Preview](./screenshots/dashboard.png)
+![Dashboard Preview](/public/img/dashboard.png)
 
 ## Features
 
@@ -55,8 +55,5 @@ npm run dev
 
 ## Screenshots
 
-|                                                     |                                               |
-| --------------------------------------------------- | --------------------------------------------- |
-| ![Bookings](./screenshots/bookings.png)             | ![Cabin Management](./screenshots/cabins.png) |
-| ![Booking Detail](./screenshots/booking-detail.png) | ![Check-In](./screenshots/checkin.png)        |
-| ![Settings](./screenshots/settings.png)             | ![Login](./screenshots/login.png)             |
+![Bookings](/public/img/bookings.png)
+![Bookings](/public/img/cabins.png)
