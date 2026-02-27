@@ -56,4 +56,4 @@ npm run dev
 ## Screenshots
 
 ![Bookings](/public/img/bookings.png)
-![Bookings](/public/img/cabins.png)
+![cabins](/public/img/cabins.png)
